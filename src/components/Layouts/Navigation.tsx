@@ -1,52 +1,58 @@
-import ApplicationLogo from '@/components/ApplicationLogo'
-import Dropdown from '@/components/Dropdown'
 import Link from 'next/link'
-import NavLink from '@/components/NavLink'
-import ResponsiveNavLink, { ResponsiveNavButton } from '@/components/ResponsiveNavLink'
-import { DropdownButton } from '@/components/DropdownLink'
-import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useAuth } from '../../hooks/useAuth'
+import Dropdown from '../Dropdown'
+import { DropdownButton } from '../DropdownLink'
+import NavLink from '../NavLink'
+import ResponsiveNavLink, { ResponsiveNavButton } from '../ResponsiveNavLink'
 
 const Navigation = ({ user }) => {
     const router = useRouter()
 
-    const { logout } = useAuth()
+    const { logout } = useAuth({})
 
     const [open, setOpen] = useState(false)
 
     return (
-        <nav className="bg-white border-b border-gray-100">
+        <nav className="bg-neutral-200 border-b border-neutral-300 rtl">
             {/* Primary Navigation Menu */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto px-4 sm:px-6 lg:px-16">
                 <div className="flex justify-between h-16">
                     <div className="flex">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/dashboard">
-                                <a>
-                                    <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" />
+                                <a className="bold">
+                                    حقل
+                                    {/* <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" /> */}
                                 </a>
                             </Link>
                         </div>
 
                         {/* Navigation Links */}
-                        <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        {/* <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                             <NavLink
                                 href="/dashboard"
                                 active={router.pathname === '/dashboard'}>
                                 Dashboard
                             </NavLink>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Settings Dropdown */}
                     <div className="hidden sm:flex sm:items-center sm:ml-6">
+                        <NavLink
+                            href="/projects/create"
+                            active={router.pathname === '/projects/create'}>
+                            اضافة مشروع
+                        </NavLink>
+
                         <Dropdown
                             align="right"
                             width="48"
                             trigger={
-                                <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
+                                <button className="flex items-center text-sm font-medium text-primary-text opacity-70 hover:opacity-100  focus:outline-none transition duration-150 ease-in-out">
                                     <div>{user?.name}</div>
 
                                     <div className="ml-1">
@@ -63,16 +69,14 @@ const Navigation = ({ user }) => {
                                     </div>
                                 </button>
                             }>
-
                             {/* Authentication */}
                             <DropdownButton onClick={logout}>
-                                Logout
+                                تسجيل الخروج
                             </DropdownButton>
                         </Dropdown>
                     </div>
-
                     {/* Hamburger */}
-                    <div className="-mr-2 flex items-center sm:hidden">
+                    <div className=" flex items-center sm:hidden">
                         <button
                             onClick={() => setOpen(open => !open)}
                             className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">

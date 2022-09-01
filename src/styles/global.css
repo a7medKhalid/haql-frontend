@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Montserrat-Arabic';
+    src: local('Montserrat-Arabic'),
+        url(../assets/fonts/Montserrat-Arabic-Regular.otf) format('opentype');
+}
+@font-face {
+    font-family: 'Montserrat-Arabic-Bold';
+    src: local('Montserrat-Arabic-Bold'),
+        url(../assets/fonts/Montserrat-Arabic-Bold.otf) format('opentype');
+}
+
+* {
+    font-family: 'Montserrat-Arabic', sans-serif;
+}
+
+.bold {
+    font-family: 'Montserrat-Arabic-Bold', sans-serif;
+}
+.rtl {
+    direction: rtl;
+}

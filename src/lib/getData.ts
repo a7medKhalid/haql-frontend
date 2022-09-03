@@ -10,6 +10,8 @@ export async function getData(url) {
         const res = await axios.get(url)
         return { data: res.data, errors: null }
     } catch (err) {
-        return { data: null, errors: err.response.data }
+        console.log({ err })
+
+        return { data: null, errors: err.response?.data }
     }
 }

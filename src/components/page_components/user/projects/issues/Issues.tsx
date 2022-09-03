@@ -4,6 +4,7 @@ import React from 'react'
 import { Card, CardItem } from '../../../../common/Card'
 export const Issues = ({ data }) => {
     const router = useRouter()
+    console.log({ data })
 
     return (
         <Card>

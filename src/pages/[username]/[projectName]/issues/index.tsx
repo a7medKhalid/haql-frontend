@@ -21,10 +21,10 @@ export default function issues({ data, errors, username, projectName }) {
         <ProjectLayout description={data?.description}>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
-                    <div className="col-span-3">
+                    <div className="col-span-12 lg:col-span-3">
                         <Issues data={data} />
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-12 lg:col-span-1">
                         <TrendingIssues data={data} />
                     </div>
                 </div>

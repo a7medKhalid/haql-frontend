@@ -5,6 +5,8 @@ import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
 import { Contributions } from '../../../../components/page_components/user/projects/contributions/Contributions'
 import { Contributers } from '../../../../components/page_components/user/projects/contributions/Contributers'
 import { Card, CardItem } from '../../../../components/common/Card'
+import { Comments } from '../../../../components/common/Comments'
+import { AddComment } from '../../../../components/common/AddComment'
 
 export async function getServerSideProps(context) {
     const { username, projectName, issue_id } = context.params
@@ -17,13 +19,11 @@ export async function getServerSideProps(context) {
     return { props: { data, errors, username, projectName } }
 }
 export default function Issue({ data }) {
-    console.log(data)
-
     return (
         <ProjectLayout description={data?.description}>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
-                    <div className="col-span-3">
+                    <div className="col-span-3 pb-10">
                         <Card>
                             <Card.CardHeader className="py-0 pt-3 pb-3">
                                 <div className="flex items-center rtl">
@@ -42,6 +42,8 @@ export default function Issue({ data }) {
                                 </div>
                             </div>
                         </Card>
+                        <Comments />
+                        <AddComment />
                     </div>
                     <div className="col-span-1">
                         <Card>

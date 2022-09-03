@@ -5,25 +5,26 @@ import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
 import { Contributions } from '../../../../components/page_components/user/projects/contributions/Contributions'
 import { Contributers } from '../../../../components/page_components/user/projects/contributions/Contributers'
 import { Card, CardItem } from '../../../../components/common/Card'
+import Button from '../../../../components/Button'
+import { AddComment } from '../../../../components/common/AddComment'
+import { Comments } from '../../../../components/common/Comments'
 
 export async function getServerSideProps(context) {
     const { username, projectName, contribution_id } = context.params
     // Fetch data from external API
-    const { data, errors } = await getData(
-        `/api/projects/${username}/${projectName}/contributions/${contribution_id}`,
-    )
+    const { data, errors } = await getData(`/api/contributions/11`)
 
     // Pass data to the page via props
     return { props: { data, errors, username, projectName } }
 }
 export default function Contribution({ data }) {
-    console.log(data)
+    console.log({ data })
 
     return (
         <ProjectLayout description={data?.description}>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
-                    <div className="col-span-3">
+                    <div className="col-span-3 pb-10">
                         <Card>
                             <Card.CardHeader className="py-0 pt-3 pb-3">
                                 <div className="flex items-center rtl">
@@ -42,6 +43,8 @@ export default function Contribution({ data }) {
                                 </div>
                             </div>
                         </Card>
+                        <Comments />
+                        <AddComment />
                     </div>
                     <div className="col-span-1">
                         <Card>

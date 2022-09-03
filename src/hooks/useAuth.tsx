@@ -113,6 +113,11 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: props) => {
         )
             router.push(redirectIfAuthenticated)
         if (middleware === 'auth' && error) logout()
+        if (middleware === 'sameAuth') {
+            if (!user || user?.username !== router.query?.username) {
+                router.push('/dashboard')
+            }
+        }
     }, [user, error])
 
     return {

@@ -44,7 +44,7 @@ export default function Tasks({ data, errors, username, projectName }) {
     ])
     return (
         <ProjectLayout description={data?.description}>
-            <div className="grid grid-cols-3 gap-5 pb-5 rtl">
+            <div className="grid grid-cols-4 gap-5 pb-5 rtl">
                 {tasks.map((task, index) => {
                     return (
                         <Task
@@ -91,7 +91,7 @@ const Task = ({ title, description }) => {
     }
 
     return (
-        <Card className="relative">
+        <Card className="relative col-span-12 md:col-span-2 2xl:col-span-1">
             <Card.CardHeader>
                 <div className="flex flex-col">
                     {editing.field == 'title' ? (
@@ -137,8 +137,8 @@ const Task = ({ title, description }) => {
                             name="description"
                             value={editing.description}
                             onChange={onChange}
-                            rows={3}
-                            className="text-primary-text py-0.5 bg-white bg-opacity-70 outline-none border border-slate-200 text-sm"
+                            rows={4}
+                            className="text-primary-text py-0.5 mt-1 bg-white bg-opacity-70 outline-none border border-slate-200 text-sm"
                             onKeyUp={(e: any) => {
                                 if (e.key == 'Enter') {
                                     if (e.target.value.split('') == '') {
@@ -199,7 +199,7 @@ const Task = ({ title, description }) => {
 
 const GoalsContainer = ({ goals }) => {
     return (
-        <div className="h-[40vh] overflow-y-auto relative">
+        <div className="h-[35vh] overflow-y-auto relative">
             {goals.map((goal, index) => (
                 <TaskItem goalTitle={goal} key={index} />
             ))}

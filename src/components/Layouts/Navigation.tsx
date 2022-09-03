@@ -3,19 +3,25 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import Dropdown from '../Dropdown'
-import { DropdownButton } from '../DropdownLink'
+import DropdownLink, { DropdownButton } from '../DropdownLink'
 import NavLink from '../NavLink'
 import ResponsiveNavLink, { ResponsiveNavButton } from '../ResponsiveNavLink'
 
-const Navigation = ({ user }) => {
+const Navigation = ({ isSubHeader, variant }) => {
     const router = useRouter()
+    const { user } = useAuth({})
 
     const { logout } = useAuth({})
 
     const [open, setOpen] = useState(false)
 
     return (
-        <nav className="bg-neutral-200 border-b border-neutral-300 rtl">
+        <nav
+            className={`bg-neutral-200 border-b border-neutral-300 rtl transition duration-300 ${
+                variant == 'showcase'
+                    ? 'bg-transparent text-white absolute top-0 w-screen h-20 z-10 border-b-0'
+                    : ''
+            }`}>
             {/* Primary Navigation Menu */}
             <div className="mx-auto px-4 sm:px-6 lg:px-16">
                 <div className="flex justify-between h-16">
@@ -28,6 +34,47 @@ const Navigation = ({ user }) => {
                                     {/* <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" /> */}
                                 </a>
                             </Link>
+                            {isSubHeader == false ||
+                                (variant == 'showcase' && (
+                                    <div className="mx-3">
+                                        <Dropdown
+                                            align="right"
+                                            width="48"
+                                            trigger={
+                                                <button
+                                                    className={`flex items-center text-sm font-medium  opacity-70 hover:opacity-100  focus:outline-none transition duration-150 ease-in-out
+                                                ${
+                                                    variant == 'showcase'
+                                                        ? ' text-white'
+                                                        : 'text-primary-text'
+                                                }
+                                                `}>
+                                                    <div>تصفح</div>
+
+                                                    <div className="ml-1">
+                                                        <svg
+                                                            className="fill-current h-4 w-4"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 20 20">
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </div>
+                                                </button>
+                                            }>
+                                            {/* Authentication */}
+                                            <DropdownLink href="/explore/projects">
+                                                المشاريع
+                                            </DropdownLink>
+                                            <DropdownLink href="/explore/users">
+                                                الحسابات
+                                            </DropdownLink>
+                                        </Dropdown>
+                                    </div>
+                                ))}
                         </div>
 
                         {/* Navigation Links */}
@@ -41,39 +88,51 @@ const Navigation = ({ user }) => {
                     </div>
 
                     {/* Settings Dropdown */}
-                    <div className="hidden sm:flex sm:items-center sm:ml-6">
+                    <div
+                        className={`hidden sm:flex sm:items-center sm:ml-6
+                    
+                      ${
+                          variant == 'showcase'
+                              ? ' text-white'
+                              : 'text-primary-text'
+                      }
+                    `}>
                         <NavLink
                             href="/projects/create"
                             active={router.pathname === '/projects/create'}>
                             اضافة مشروع
                         </NavLink>
+                        {user ? (
+                            <Dropdown
+                                align="left"
+                                width="48"
+                                trigger={
+                                    <button className="flex items-center text-sm font-medium  opacity-70 hover:opacity-100  focus:outline-none transition duration-150 ease-in-out">
+                                        <div>{user?.name}</div>
 
-                        <Dropdown
-                            align="right"
-                            width="48"
-                            trigger={
-                                <button className="flex items-center text-sm font-medium text-primary-text opacity-70 hover:opacity-100  focus:outline-none transition duration-150 ease-in-out">
-                                    <div>{user?.name}</div>
-
-                                    <div className="ml-1">
-                                        <svg
-                                            className="fill-current h-4 w-4"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20">
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                    </div>
-                                </button>
-                            }>
-                            {/* Authentication */}
-                            <DropdownButton onClick={logout}>
-                                تسجيل الخروج
-                            </DropdownButton>
-                        </Dropdown>
+                                        <div className="ml-1">
+                                            <svg
+                                                className="fill-current h-4 w-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                }>
+                                <DropdownLink href={`/${user?.username}`}>
+                                    حسابي
+                                </DropdownLink>
+                                {/* Authentication */}
+                                <DropdownButton onClick={logout}>
+                                    تسجيل الخروج
+                                </DropdownButton>
+                            </Dropdown>
+                        ) : null}
                     </div>
                     {/* Hamburger */}
                     <div className=" flex items-center sm:hidden">

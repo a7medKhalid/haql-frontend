@@ -7,17 +7,16 @@ import { getData } from '../../../lib/getData'
 
 export async function getServerSideProps(context) {
     const { username, projectName } = context.params
+
     // Fetch data from external API
     const { data, errors } = await getData(
         `/api/projects/${username}/${projectName}`,
     )
 
     // Pass data to the page via props
-    return { props: { data, errors, username } }
+    return { props: { data } }
 }
-export default function projectName({ data, errors, username }) {
-    console.log({ data })
-
+export default function projectName({ data, username, projectName }) {
     return (
         <ProjectLayout description={data?.description}>
             <div>

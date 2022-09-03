@@ -17,12 +17,12 @@ export async function getServerSideProps(context) {
 export default function contributions({ data, errors, username, projectName }) {
     return (
         <ProjectLayout description={data?.description}>
-            <div className="text-4xl">
-                <div className="lg:grid grid-cols-4 gap-5">
-                    <div className="col-span-3">
+            <div>
+                <div className="grid grid-cols-4 gap-5">
+                    <div className="col-span-12 lg:col-span-3">
                         <Contributions data={data} />
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-12 lg:col-span-1">
                         <Contributers data={data} />
                     </div>
                 </div>

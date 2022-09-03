@@ -49,8 +49,6 @@ export default function create({ data }) {
             payload: formState,
             url: '/api/contributions',
             onSuccess: a => {
-                console.log({ a })
-
                 router.push(
                     '/[username]/[projectName]/contributions/[contribution_id]',
                     `/${router.query.username}/${router.query.projectName}/contributions/${a.id}`,

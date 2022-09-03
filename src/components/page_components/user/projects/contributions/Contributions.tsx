@@ -2,8 +2,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Card, CardItem } from '../../../../common/Card'
+
 export const Contributions = ({ data }) => {
     const router = useRouter()
+    console.log({ data })
 
     return (
         <Card>

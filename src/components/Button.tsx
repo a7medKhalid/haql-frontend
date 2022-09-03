@@ -1,4 +1,16 @@
-const Button = ({ type = 'submit', className, loading = false, ...props }) => (
+type buttonType = 'submit' | 'button' | 'reset'
+interface props {
+    type?: buttonType
+    className?: string
+    loading?: boolean
+    [key: string]: any
+}
+const Button = ({
+    type = 'submit',
+    className = '',
+    loading = false,
+    ...props
+}: props) => (
     <button
         type={type}
         disabled={loading}

@@ -29,6 +29,7 @@ export const UserProjects = () => {
                             <UserProjectsItem
                                 key={item.id}
                                 title={item.name}
+                                id={item.id}
                                 username={router.query.username}
                                 description={item.description}
                             />
@@ -39,11 +40,11 @@ export const UserProjects = () => {
     )
 }
 
-const UserProjectsItem = ({ title, description, username }) => {
+const UserProjectsItem = ({ title, description, username, id }) => {
     return (
         <Card.CardItem>
             <div className="flex flex-col w-full">
-                <Link href={`/${username}/${title}`}>
+                <Link href={`/${username}/project/${id}`}>
                     <a className=" font-bold text-primary hover:underline cursor-pointer">
                         {title}
                     </a>

@@ -1,27 +1,38 @@
 import React from 'react'
-import { getData } from '../../../../lib/getData'
-import AppLayout from '../../../../components/Layouts/AppLayout'
-import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
-import { Contributions } from '../../../../components/page_components/user/projects/contributions/Contributions'
-import { Contributers } from '../../../../components/page_components/user/projects/contributions/Contributers'
-import { Card, CardItem } from '../../../../components/common/Card'
-import Button from '../../../../components/Button'
-import { AddComment } from '../../../../components/common/AddComment'
-import { Comments } from '../../../../components/common/Comments'
+import { getData } from '../../../../../lib/getData'
+import AppLayout from '../../../../../components/Layouts/AppLayout'
+import ProjectLayout from '../../../../../components/Layouts/ProjectLayout'
+import { Contributions } from '../../../../../components/page_components/user/projects/contributions/Contributions'
+import { Contributers } from '../../../../../components/page_components/user/projects/contributions/Contributers'
+import { Card, CardItem } from '../../../../../components/common/Card'
+import Button from '../../../../../components/Button'
+import { AddComment } from '../../../../../components/common/AddComment'
+import { Comments } from '../../../../../components/common/Comments'
+import Link from 'next/link'
 
 export async function getServerSideProps(context) {
-    const { username, projectName, contribution_id } = context.params
+    const { username, projectID, contribution_id } = context.params
     // Fetch data from external API
-    const { data, errors } = await getData(`/api/contributions/11`)
+    const { data, errors } = await getData(
+        `/api/contributions/${contribution_id}`,
+    )
 
     // Pass data to the page via props
-    return { props: { data, errors, username, projectName } }
+    return { props: { data, errors, username, projectID, contribution_id } }
 }
-export default function Contribution({ data }) {
-    console.log({ data })
+export default function Contribution({ data, contribution_id }) {
+    const details = {
+        title: data?.title,
+        description: data?.description,
+        contributor: { ...data?.contributor },
+        link: data?.link,
+        id: data?.id,
+        createdAt: data?.created_at,
+        status: data?.status,
+    }
 
     return (
-        <ProjectLayout description={data?.description}>
+        <ProjectLayout projectData={data}>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">
@@ -29,17 +40,24 @@ export default function Contribution({ data }) {
                             <Card.CardHeader className="py-0 pt-3 pb-3">
                                 <div className="flex items-center rtl">
                                     <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div>
-                                    <div className="text-primary  hover:underline cursor-pointer">
-                                        اسم المساهم
-                                    </div>
+                                    <Link
+                                        href={`/${details.contributor.username}`}>
+                                        <a
+                                            href=""
+                                            className="text-primary  hover:underline cursor-pointer">
+                                            {details?.contributor.name +
+                                                '/' +
+                                                details?.contributor.username}
+                                        </a>
+                                    </Link>
                                 </div>
                             </Card.CardHeader>
                             <div className="p-5">
                                 <div className="bold text-lg text-primary-text">
-                                    عنوان المساهمة
+                                    {details.title}
                                 </div>
                                 <div className=" mt-3 text-primary-text">
-                                    تفاصيل المساهمة
+                                    {details.description}
                                 </div>
                             </div>
                         </Card>
@@ -52,30 +70,19 @@ export default function Contribution({ data }) {
                             <CardItem>
                                 <ProjectDetailItem
                                     title={'رقم المساهمة'}
-                                    value="#142"
+                                    value={'#' + details?.id}
                                 />
                             </CardItem>
                             <CardItem>
                                 <ProjectDetailItem
                                     title={'التاريخ'}
-                                    value="12/7/2020"
+                                    value={details.createdAt}
                                 />
                             </CardItem>
                             <CardItem>
                                 <ProjectDetailItem
-                                    title={'القضية المربوطة'}
-                                    value="طلب شعار #12"
-                                />
-                            </CardItem>
-                            <CardItem>
-                                <ProjectDetailItem
-                                    title={'المهمة'}
-                                    value="الشعار #2"
-                                />
-                            </CardItem>
-                            <CardItem>
-                                <ProjectDetailSpecialties
-                                    specialties={['برمجة', 'تصميم', 'شعار']}
+                                    title={'الرابط'}
+                                    value={details.link}
                                 />
                             </CardItem>
                         </Card>
@@ -114,7 +121,18 @@ const ProjectDetailItem = ({ title, value }) => {
             <div className="text-primary-text font-bold hover:underline cursor-pointer">
                 {title}
             </div>
-            <div className="text-primary-text opacity-50 rtl mt-2">{value}</div>
+            {title == 'الرابط' ? (
+                <a
+                    href={value}
+                    target="_blank"
+                    className="text-primary cursor-pointer hover:underline rtl mt-2">
+                    {value}
+                </a>
+            ) : (
+                <div className="text-primary-text opacity-50 rtl mt-2">
+                    {value}
+                </div>
+            )}
         </div>
     )
 }

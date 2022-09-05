@@ -1,24 +1,22 @@
 import React from 'react'
-import Card from '../../../components/common/Card'
-import AppLayout from '../../../components/Layouts/AppLayout'
-import ProjectLayout from '../../../components/Layouts/ProjectLayout'
-import axios from '../../../lib/axios'
-import { getData } from '../../../lib/getData'
+import Card from '../../../../components/common/Card'
+import AppLayout from '../../../../components/Layouts/AppLayout'
+import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
+import axios from '../../../../lib/axios'
+import { getData } from '../../../../lib/getData'
 
 export async function getServerSideProps(context) {
-    const { username, projectName } = context.params
+    const { username, projectID } = context.params
 
     // Fetch data from external API
-    const { data, errors } = await getData(
-        `/api/projects/${username}/${projectName}`,
-    )
+    const { data, errors } = await getData(`/api/projects/${projectID}`)
 
     // Pass data to the page via props
     return { props: { data } }
 }
-export default function projectName({ data, username, projectName }) {
+export default function projectName({ data, username, projectID }) {
     return (
-        <ProjectLayout description={data?.description}>
+        <ProjectLayout projectData={data}>
             <div>
                 <Card>
                     <Card.CardHeader>

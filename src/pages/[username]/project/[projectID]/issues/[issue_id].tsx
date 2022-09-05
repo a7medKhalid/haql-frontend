@@ -1,26 +1,34 @@
 import React from 'react'
-import { getData } from '../../../../lib/getData'
-import AppLayout from '../../../../components/Layouts/AppLayout'
-import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
-import { Contributions } from '../../../../components/page_components/user/projects/contributions/Contributions'
-import { Contributers } from '../../../../components/page_components/user/projects/contributions/Contributers'
-import { Card, CardItem } from '../../../../components/common/Card'
-import { Comments } from '../../../../components/common/Comments'
-import { AddComment } from '../../../../components/common/AddComment'
+import { getData } from '../../../../../lib/getData'
+import AppLayout from '../../../../../components/Layouts/AppLayout'
+import ProjectLayout from '../../../../../components/Layouts/ProjectLayout'
+import { Contributions } from '../../../../../components/page_components/user/projects/contributions/Contributions'
+import { Contributers } from '../../../../../components/page_components/user/projects/contributions/Contributers'
+import { Card, CardItem } from '../../../../../components/common/Card'
+import { Comments } from '../../../../../components/common/Comments'
+import { AddComment } from '../../../../../components/common/AddComment'
 
 export async function getServerSideProps(context) {
-    const { username, projectName, issue_id } = context.params
+    const { issue_id } = context.params
     // Fetch data from external API
-    const { data, errors } = await getData(
-        `/api/projects/${username}/${projectName}/issue/${issue_id}`,
-    )
+    const { data, errors } = await getData(`/api/issues/${issue_id}`)
 
     // Pass data to the page via props
-    return { props: { data, errors, username, projectName } }
+    return { props: { data, errors } }
 }
 export default function Issue({ data }) {
+    console.log({ data })
+    const details = {
+        title: data?.title,
+        description: data?.description,
+        issuer: { ...data?.user },
+        id: data?.id,
+        createdAt: data?.created_at,
+        status: data?.status,
+    }
+
     return (
-        <ProjectLayout description={data?.description}>
+        <ProjectLayout>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">

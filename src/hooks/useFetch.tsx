@@ -13,14 +13,12 @@ const useFetch = (url = '') => {
             .get(url)
             .then(res => {
                 if (isMounted) {
-                    // console.log(res.data)
                     setData(res.data)
                     setErrors(null)
                 }
             })
             .catch(err => {
                 if (isMounted) {
-                    // console.log(err.response.data)
                     setErrors(err.response)
                     setData(null)
                 }

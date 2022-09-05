@@ -11,7 +11,7 @@ interface props {
     header?: any
     subHeader?: any
     contentClassname?: string
-    variant?: 'default' | 'showcase'
+    variant?: 'default' | 'showcase' | 'project'
 }
 export const getRouteName = route => {
     const path = route.split('/')

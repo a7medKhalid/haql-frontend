@@ -4,14 +4,13 @@ import React from 'react'
 import { Card, CardItem } from '../../../../common/Card'
 export const Issues = ({ data }) => {
     const router = useRouter()
-    console.log({ data })
 
     return (
         <Card>
             <Card.CardHeader>
                 <div className="flex items-center justify-between">
                     <Link
-                        href={`/${router.query.username}/${router.query.projectName}/issues/create`}>
+                        href={`/${router.query.username}/project/${router.query.projectID}/issues/create`}>
                         <a
                             className="
                             text-primary hover:underline cursor-pointer
@@ -56,7 +55,7 @@ export const IssueItem = ({ name, info, status, id }) => {
                 <div className="w-10 h-10 rounded-full bg-gray-300"></div>
                 <div className="flex flex-col mr-3">
                     <Link
-                        href={`/${router.query.username}/${router.query.projectName}/issues/${id}`}>
+                        href={`/${router.query.username}/${router.query.projectID}/issues/${id}`}>
                         <a className='className="text-sm text-primary hover:underline cursor-pointer font-bold"'>
                             {name}
                         </a>

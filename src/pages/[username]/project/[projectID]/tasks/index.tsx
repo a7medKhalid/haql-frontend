@@ -1,21 +1,21 @@
 import React from 'react'
-import Card, { CardItem } from '../../../../components/common/Card'
-import Input from '../../../../components/Input'
-import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
-import { getData } from '../../../../lib/getData'
+import Card, { CardItem } from '../../../../../components/common/Card'
+import Input from '../../../../../components/Input'
+import ProjectLayout from '../../../../../components/Layouts/ProjectLayout'
+import { getData } from '../../../../../lib/getData'
 
 export async function getServerSideProps(context) {
-    const { username, projectName } = context.params
+    const { username, projectID } = context.params
     // Fetch data from external API
 
     const { data, errors } = await getData(
-        `/api/projects/${username}/${projectName}/chat`,
+        `/api/projects/${username}/${projectID}/chat`,
     )
 
     // Pass data to the page via props
     return { props: { data, errors, username } }
 }
-export default function Tasks({ data, errors, username, projectName }) {
+export default function Tasks({ data, errors, username, projectID }) {
     const [tasks, setTasks] = React.useState([
         {
             title: 'المهمة واحد',

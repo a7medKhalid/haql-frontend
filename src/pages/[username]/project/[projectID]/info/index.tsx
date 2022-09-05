@@ -1,18 +1,17 @@
 import Image from 'next/image'
 import React from 'react'
-import AppLayout from '../../../../components/Layouts/AppLayout'
-import { getData } from '../../../../lib/getData'
-import authBanner from '../../../../assets/images/authBanner.png'
-import Button from '../../../../components/Button'
+
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import AppLayout from '../../../../../components/Layouts/AppLayout'
+import { getData } from '../../../../../lib/getData'
+import Button from '../../../../../components/Button'
+import authBanner from '../../../../../assets/images/authBanner.png'
 export async function getServerSideProps(context) {
-    const { username, projectName } = context.params
+    const { username, projectID } = context.params
 
     // Fetch data from external API
-    const { data, errors } = await getData(
-        `/api/projects/${username}/${projectName}`,
-    )
+    const { data, errors } = await getData(`/api/projects/${projectID}`)
 
     // Pass data to the page via props
     return { props: { data } }
@@ -42,14 +41,14 @@ export default function Info({ data }) {
                                 <Button
                                     onClick={() =>
                                         router.push(
-                                            `/${router?.query.username}/${router?.query.projectName}`,
+                                            `/${router?.query.username}/${router?.query.projectID}`,
                                         )
                                     }
                                     className="ml-10 text-sm">
                                     تصفح المشروع
                                 </Button>
                                 <Link
-                                    href={`/${router.query.username}/${router.query.projectName}/contributions/create`}>
+                                    href={`/${router.query.username}/${router.query.projectID}/contributions/create`}>
                                     <a className="text-white hover:underline opacity-80 cursor-pointer transtion duration-150 hover:opacity-100 text-sm">
                                         ساهم
                                     </a>

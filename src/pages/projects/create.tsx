@@ -39,8 +39,8 @@ export default function create() {
             url: '/api/projects',
             onSuccess: a => {
                 router.push(
-                    '/[username]/[projectName]',
-                    `/${user.username}/${a.name}`,
+                    '/[username]/project/[projectID]',
+                    `/${user.username}/project/${a.id}`,
                 )
             },
         })

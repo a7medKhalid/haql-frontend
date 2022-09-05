@@ -1,20 +1,20 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import Button from '../../../../components/Button'
-import Input from '../../../../components/Input'
-import InputError from '../../../../components/InputError'
-import Label from '../../../../components/Label'
-import CreateLayout from '../../../../components/Layouts/CreateLayout'
-import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
-import { useAuth } from '../../../../hooks/useAuth'
-import useSubmit from '../../../../hooks/useSubmit'
-import { getData } from '../../../../lib/getData'
+import Button from '../../../../../components/Button'
+import Input from '../../../../../components/Input'
+import InputError from '../../../../../components/InputError'
+import Label from '../../../../../components/Label'
+import CreateLayout from '../../../../../components/Layouts/CreateLayout'
+import ProjectLayout from '../../../../../components/Layouts/ProjectLayout'
+import { useAuth } from '../../../../../hooks/useAuth'
+import useSubmit from '../../../../../hooks/useSubmit'
+import { getData } from '../../../../../lib/getData'
 
 export async function getServerSideProps(context) {
-    const { username, projectName } = context.params
+    const { username, projectID } = context.params
     // Fetch data from external API
     const { data, errors } = await getData(
-        `/api/projects/${username}/${projectName}`,
+        `/api/projects/${username}/${projectID}`,
     )
 
     // Pass data to the page via props
@@ -29,7 +29,7 @@ export default function create({ data }) {
     const router = useRouter()
 
     const [formState, setFormState] = useState<any>({
-        project_id: 21,
+        project_id: router.query.projectID,
         title: '',
         description: '',
         link: '',
@@ -50,15 +50,15 @@ export default function create({ data }) {
             url: '/api/contributions',
             onSuccess: a => {
                 router.push(
-                    '/[username]/[projectName]/contributions/[contribution_id]',
-                    `/${router.query.username}/${router.query.projectName}/contributions/${a.id}`,
+                    '/[username]/project/[projectID]/contributions/[contribution_id]',
+                    `/${router.query.username}/project/${router.query.projectID}/contributions/${a.id}`,
                 )
             },
         })
     }
 
     return (
-        <ProjectLayout description={data?.description}>
+        <ProjectLayout>
             <CreateLayout>
                 <CreateLayout.Form>
                     <div className="text-4xl mb-10">اضافة مساهمة</div>

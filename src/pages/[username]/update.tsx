@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/useAuth'
 import useSubmit from '../../hooks/useSubmit'
 import { getData } from '../../lib/getData'
 export async function getServerSideProps(context) {
-    const { username, projectName } = context.params
+    const { username, projectID } = context.params
     // Fetch data from external API
     const { data, errors } = await getData(`/api/users/${username}`)
 

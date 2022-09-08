@@ -1,14 +1,24 @@
+import Link from 'next/link'
 import React from 'react'
+import useSWR from 'swr'
 import Card from '../../components/common/Card'
-import { Newspaper, SaveAs } from '../../components/common/HeroIcons'
+import { FetchingCard } from '../../components/common/FetchingCard'
+import {
+    DocumentTextIcon,
+    Newspaper,
+    SaveAs,
+} from '../../components/common/HeroIcons'
+import { userType } from '../../components/common/types'
 import AppLayout from '../../components/Layouts/AppLayout'
+import { fetcher } from '../../lib/fetcher'
 
 export default function Users() {
     return (
         <AppLayout>
             <div className="grid grid-cols-4 gap-5">
                 <div className="col-span-12 lg:col-span-3">
-                    <RelatedProjects />
+                    <WrapperContainer type="" title="آخر الحسابات" />
+                    {/* <LatestUsers /> */}
                 </div>
                 <div className="col-span-12 lg:col-span-1">
                     <SideBar />
@@ -21,114 +31,44 @@ export default function Users() {
 const SideBar = () => {
     return (
         <div className="grid grid-cols-1 gap-5">
-            <UsersMostContributions />
-            <UsersMostProjects />
+            <WrapperContainer type="most-contributors" title="الأكثر مساهمة" />
+            <WrapperContainer type="most-projects" title="الأكثر مشاريعًا" />
         </div>
     )
 }
-const UsersMostContributions = () => {
+
+const WrapperContainer = ({ type = '', title }) => {
+    const { data, error } = useSWR(`/api/users/${type}`, fetcher)
+
     return (
         <Card>
-            <Card.CardHeader>الحسابات الأكثر مساهمة </Card.CardHeader>
-            <Card.CardItem>
-                <UserCard
-                    bio={
-                        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo aliquam nihil consequuntur id est laboriosam sequi voluptatem perferendis velit maiores eos veniam numquam, delectus error tenetur rerum reprehenderit excepturi? Dignissimos!'
-                    }
-                    username={'محمد'}
-                    contributions={5}
-                    issues={1}
-                />
-            </Card.CardItem>
-            <Card.CardItem>
-                <UserCard
-                    bio={
-                        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo aliquam nihil consequuntur id est laboriosam sequi voluptatem perferendis velit maiores eos veniam numquam, delectus error tenetur rerum reprehenderit excepturi? Dignissimos!'
-                    }
-                    username={'محمد'}
-                    contributions={5}
-                    issues={1}
-                />
-            </Card.CardItem>
-        </Card>
-    )
-}
-
-const UsersMostProjects = () => {
-    return (
-        <Card>
-            <Card.CardHeader>الحسابات الأكثر مشاريعًا </Card.CardHeader>
-            <Card.CardItem>
-                <UserCard
-                    bio={
-                        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo aliquam nihil consequuntur id est laboriosam sequi voluptatem perferendis velit maiores eos veniam numquam, delectus error tenetur rerum reprehenderit excepturi? Dignissimos!'
-                    }
-                    username={'محمد'}
-                    contributions={5}
-                    issues={1}
-                />
-            </Card.CardItem>
-            <Card.CardItem>
-                <UserCard
-                    bio={
-                        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo aliquam nihil consequuntur id est laboriosam sequi voluptatem perferendis velit maiores eos veniam numquam, delectus error tenetur rerum reprehenderit excepturi? Dignissimos!'
-                    }
-                    username={'محمد'}
-                    contributions={5}
-                    issues={1}
-                />
-            </Card.CardItem>
-            <Card.CardItem>
-                <UserCard
-                    bio={
-                        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo aliquam nihil consequuntur id est laboriosam sequi voluptatem perferendis velit maiores eos veniam numquam, delectus error tenetur rerum reprehenderit excepturi? Dignissimos!'
-                    }
-                    username={'محمد'}
-                    contributions={5}
-                    issues={1}
-                />
-            </Card.CardItem>
-            <Card.CardItem>
-                <UserCard
-                    bio={
-                        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo aliquam nihil consequuntur id est laboriosam sequi voluptatem perferendis velit maiores eos veniam numquam, delectus error tenetur rerum reprehenderit excepturi? Dignissimos!'
-                    }
-                    username={'محمد'}
-                    contributions={5}
-                    issues={1}
-                />
-            </Card.CardItem>
-        </Card>
-    )
-}
-
-const RelatedProjects = () => {
-    return (
-        <div className="">
-            <Card>
-                <Card.CardHeader>جميع المستخدمين</Card.CardHeader>
-                <Card.CardItem>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <div className="ml-2">
-                                <UserCard
-                                    bio={
-                                        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo aliquam nihil consequuntur id est laboriosam sequi voluptatem perferendis velit maiores eos veniam numquam, delectus error tenetur rerum reprehenderit excepturi? Dignissimos!'
-                                    }
-                                    username={'محمد'}
-                                    contributions={5}
-                                    issues={1}
-                                />
+            <Card.CardHeader>{title}</Card.CardHeader>
+            <FetchingCard data={data} error={error}>
+                {data &&
+                    data.data?.map((item: userType, index) => (
+                        <Card.CardItem>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <div className="ml-2">
+                                        <UserCard
+                                            bio={item?.bio}
+                                            username={item?.username}
+                                            contributions={
+                                                item?.contributionsCount
+                                            }
+                                            projects={item?.projectsCount}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </Card.CardItem>
-            </Card>
-        </div>
+                        </Card.CardItem>
+                    ))}
+            </FetchingCard>
+        </Card>
     )
 }
 
-const ProjectBriefStats = ({ contributions, issues }) => {
+const ProjectBriefStats = ({ contributions, projects }) => {
     return (
         <div className="flex item-center mt-2   rtl">
             <div className="text-xs text-primary-text opacity-50 ml-4">
@@ -140,32 +80,35 @@ const ProjectBriefStats = ({ contributions, issues }) => {
 
             <div className="text-xs text-primary-text opacity-50 ml-4">
                 <div className="flex item-center">
-                    <Newspaper />
-                    <span className="mr-1"> قضايا: {issues}</span>
+                    <DocumentTextIcon />
+                    <span className="mr-1"> المشاريع: {projects}</span>
                 </div>
             </div>
         </div>
     )
 }
 
-const UserCard = ({ username, bio, contributions, issues }) => {
+const UserCard = ({ username, bio, contributions, projects }) => {
     return (
         <div className="flex  rtl">
-            <div className="w-16 ml-5">
+            <div className="w-16 pl-5">
                 <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
             </div>
             <div>
-                <div className="text-sm  text-primary-text font-bold">
-                    {username}
-                </div>
-
-                <div className="text-sm text-primary-text opacity-50 mt-2 line-clamp-3 hover:line-clamp-none ">
-                    {bio}
+                <Link href={`/${username}`}>
+                    <a className="text-sm  text-primary curosr-pointer hover:underline font-bold">
+                        {username}
+                    </a>
+                </Link>
+                <div>
+                    <div className="text-sm text-primary-text opacity-50 mt-2 line-clamp-3 hover:line-clamp-none ">
+                        {bio}
+                    </div>
                 </div>
 
                 <ProjectBriefStats
                     contributions={contributions}
-                    issues={issues}
+                    projects={projects}
                 />
             </div>
         </div>

@@ -18,6 +18,11 @@ module.exports = {
                 },
                 'primary-text': '#1E293B',
             },
+            transitionTimingFunction: {
+                'spring-high': 'cubic-bezier(0,1.54,.63,.24)',
+                'spring-mid': 'cubic-bezier(0,1.54,.83,.67)',
+                'spring-low': 'cubic-bezier(0,1.26,.83,.67)',
+            },
         },
     },
     variants: {
@@ -29,5 +34,6 @@ module.exports = {
     plugins: [
         require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
+        require('@tailwindcss/aspect-ratio'),
     ],
 }

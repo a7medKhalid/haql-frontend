@@ -10,17 +10,7 @@ import { useAuth } from '../../../../../hooks/useAuth'
 import useSubmit from '../../../../../hooks/useSubmit'
 import { getData } from '../../../../../lib/getData'
 
-export async function getServerSideProps(context) {
-    const { username, projectName } = context.params
-    // Fetch data from external API
-    const { data, errors } = await getData(
-        `/api/projects/${username}/${projectName}`,
-    )
-
-    // Pass data to the page via props
-    return { props: { data, errors } }
-}
-export default function create({ data }) {
+export default function create() {
     const { register, user } = useAuth({
         middleware: 'auth',
         // redirectIfAuthenticated: '/dashboard',

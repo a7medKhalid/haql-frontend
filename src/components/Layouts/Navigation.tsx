@@ -132,7 +132,15 @@ const Navigation = ({ isSubHeader, variant }) => {
                                     تسجيل الخروج
                                 </DropdownButton>
                             </Dropdown>
-                        ) : null}
+                        ) : (
+                            <div className="flex item-center ">
+                                <Link href="/login">
+                                    <a className="text-primary text-sm hover:underline cursor-pointer">
+                                        تسجيل الدخول
+                                    </a>
+                                </Link>
+                            </div>
+                        )}
                     </div>
                     {/* Hamburger */}
                     <div className=" flex items-center sm:hidden">

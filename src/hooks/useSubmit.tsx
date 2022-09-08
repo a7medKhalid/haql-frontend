@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import axios from '../lib/axios'
+import Nprogress from 'nprogress'
+
 const useSubmit = () => {
     const [errors, setErrors] = useState<any>([])
     const [response, setResponse] = useState(null)
@@ -13,6 +15,8 @@ const useSubmit = () => {
         method = 'post',
         onSuccess,
     }: sendProps) => {
+        //   NProgress.start()
+
         await csrf()
         setErrors([])
         setLoading(true)
@@ -24,7 +28,7 @@ const useSubmit = () => {
                 }
             })
             .catch(error => {
-                console.log(error.response?.data)
+                console.log(error)
                 // if (error.response.status !== 422) throw error
                 setErrors(error.response.data?.errors)
             })

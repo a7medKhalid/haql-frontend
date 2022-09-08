@@ -9,6 +9,13 @@ import Button from '../../../../../components/Button'
 import { AddComment } from '../../../../../components/common/AddComment'
 import { Comments } from '../../../../../components/common/Comments'
 import Link from 'next/link'
+import { ChevronDoubleIcon } from '../../../../../components/common/HeroIcons'
+import AnimatedSideBar from '../../../../../components/common/AnimatedSideBar'
+import { FetchingCard } from '../../../../../components/common/FetchingCard'
+import useSWR from 'swr'
+import { fetcher } from '../../../../../lib/fetcher'
+import { useRouter } from 'next/router'
+import useSubmit from '../../../../../hooks/useSubmit'
 
 export async function getServerSideProps(context) {
     const { username, projectID, contribution_id } = context.params
@@ -21,7 +28,9 @@ export async function getServerSideProps(context) {
     return { props: { data, errors, username, projectID, contribution_id } }
 }
 export default function Contribution({ data, contribution_id }) {
+    const router = useRouter()
     const details = {
+        projectID: router.query.projectID,
         title: data?.title,
         description: data?.description,
         contributor: { ...data?.contributor },
@@ -32,7 +41,7 @@ export default function Contribution({ data, contribution_id }) {
     }
 
     return (
-        <ProjectLayout projectData={data}>
+        <ProjectLayout>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">
@@ -69,6 +78,12 @@ export default function Contribution({ data, contribution_id }) {
                             <Card.CardHeader>تفاصيل المساهمة</Card.CardHeader>
                             <CardItem>
                                 <ProjectDetailItem
+                                    title={'الحالة'}
+                                    value={details.status}
+                                />
+                            </CardItem>
+                            <CardItem>
+                                <ProjectDetailItem
                                     title={'رقم المساهمة'}
                                     value={'#' + details?.id}
                                 />
@@ -85,11 +100,149 @@ export default function Contribution({ data, contribution_id }) {
                                     value={details.link}
                                 />
                             </CardItem>
+                            {details.status != 'accepted' && (
+                                <AcceptContributionButton details={details} />
+                            )}
                         </Card>
                     </div>
                 </div>
             </div>
         </ProjectLayout>
+    )
+}
+
+const AcceptContributionButton = ({ details }) => {
+    const { send, errors, response, loading } = useSubmit()
+    const router = useRouter()
+    const acceptContribution = () => {
+        send({
+            payload: {
+                contribution_id: details.id,
+                status: 'accepted',
+            },
+            method: 'put',
+            url: '/api/contributions',
+            onSuccess: a => {
+                router.push(
+                    `/${router.query.username}/project/${details.projectID}`,
+                )
+            },
+        })
+    }
+    if (details.status === 'accepted') return null
+    const { data, error } = useSWR(
+        `/api/permissions?model=contribution&model_id=${details.id}&permission=update`,
+        fetcher,
+    )
+    if (!data) {
+        return null
+    }
+    if (data?.message === false) {
+        return null
+    }
+    return (
+        <CardItem>
+            <AnimatedSideBar
+                trigger={
+                    <Button
+                        onClick={() => {
+                            console.log('accept')
+                        }}>
+                        <ChevronDoubleIcon classname="mr-2 w-5 h-5" />
+                        قبول المساهمة
+                    </Button>
+                }>
+                <div>
+                    <Card.CardHeader>
+                        <div className="text-2xl bold">
+                            قبول المساهمة في المستودع
+                        </div>
+                        <div className="mt-4 text-primary-text/80">
+                            هل تريد إضافة المساهمة كخانة جديدة في المستودع، أم
+                            تريد استبدالها بمساهمة سابقة (لن يتم حذف المساهمة
+                            وستبقى موجودة في المساهمات، لكن ستختفي من المستودع)
+                        </div>
+                        <Button
+                            className="mt-4 text-xs py-3 "
+                            onClick={acceptContribution}>
+                            قبول وإضافة جديدة
+                        </Button>
+                    </Card.CardHeader>
+                    <div className="px-5">
+                        <AcceptedContributions details={details} />
+                    </div>
+                </div>
+            </AnimatedSideBar>
+        </CardItem>
+    )
+}
+const AcceptedContributions = ({ details }) => {
+    const { send, errors, response, loading } = useSubmit()
+    const router = useRouter()
+    const { data, error } = useSWR(
+        `/api/projects/${router.query.projectID}/contributions?status=accepted`,
+        fetcher,
+    )
+    if (error) {
+        return null
+    }
+    const acceptContribution = () => {
+        send({
+            payload: {
+                contribution_id: details.id,
+                status: 'accepted',
+            },
+            method: 'put',
+            url: '/api/contributions',
+            onSuccess: a => {
+                router.push(
+                    `/${router.query.username}/project/${details.projectID}`,
+                )
+            },
+        })
+    }
+    const acceptAndReplace = replacedID => {
+        send({
+            payload: {
+                contribution_id: replacedID,
+                status: 'archived',
+            },
+            method: 'put',
+            url: '/api/contributions',
+        })
+        acceptContribution()
+    }
+    return (
+        <FetchingCard data={data} error={error}>
+            <div className="text-lg bold mt-4">أو الإستبدال بــ</div>
+            <Card className="mt-4">
+                {data?.data?.map(contribution => (
+                    <Card.CardItem key={contribution.id}>
+                        <div className="flex items-center text-xs justify-between w-full">
+                            <div className="flex items-center justify-between">
+                                <Button
+                                    className="text-xs py-1 px-3 "
+                                    onClick={() =>
+                                        acceptAndReplace(contribution.id)
+                                    }>
+                                    استبدال
+                                </Button>
+                                <div className="text-primary-text text border-r border-neutral-300  px-5 ">
+                                    {`#${contribution.id}`}
+                                </div>
+                                <div className="flex items-center text-primary-text text border-r border-neutral-300  px-5">
+                                    <div className=" ">{`${contribution.contributor.name}/${contribution.contributor.username}`}</div>
+                                    <div className="w-7 h-7 rounded-full bg-gray-300 ml-3"></div>
+                                </div>
+                            </div>
+                            <div className="text-primary-text text-lg">
+                                {contribution.title}
+                            </div>
+                        </div>
+                    </Card.CardItem>
+                ))}
+            </Card>
+        </FetchingCard>
     )
 }
 

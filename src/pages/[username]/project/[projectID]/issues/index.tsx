@@ -19,7 +19,7 @@ export default function issues({ data, errors, projectID }) {
     return (
         <ProjectLayout>
             <div>
-                <div className="lg:grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-4 gap-5">
                     <div className="col-span-12 lg:col-span-3">
                         <Issues data={data} />
                     </div>

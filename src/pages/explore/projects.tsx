@@ -1,14 +1,22 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
+import useSWR from 'swr'
 import Card from '../../components/common/Card'
+import { FetchingCard } from '../../components/common/FetchingCard'
 import { Newspaper, SaveAs } from '../../components/common/HeroIcons'
+import { projectDataType } from '../../components/common/types'
 import AppLayout from '../../components/Layouts/AppLayout'
+import { fetcher } from '../../lib/fetcher'
 
 export default function Projects() {
     return (
         <AppLayout>
-            <div className="grid grid-cols-4 gap-5">
+            <div className="grid grid-cols-4 gap-5 pb-10">
                 <div className="col-span-12 lg:col-span-3">
-                    <RelatedProjects />
+                    <LatestProjects />
+
+                    {/* <RelatedProjects /> */}
                 </div>
                 <div className="col-span-12 lg:col-span-1">
                     <SideBar />
@@ -21,7 +29,6 @@ export default function Projects() {
 const SideBar = () => {
     return (
         <div className="grid grid-cols-1 gap-5">
-            <LatestProjects />
             <TrendingProjects />
             <UserIntrests />
         </div>
@@ -29,28 +36,41 @@ const SideBar = () => {
 }
 
 const LatestProjects = () => {
+    const { data, error } = useSWR(`/api/projects`, fetcher)
+    console.log({ data })
+
     return (
         <Card>
             <Card.CardHeader>آخر المشاريع </Card.CardHeader>
-            <Card.CardItem>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                        <div className="ml-2">
-                            <div className="text-sm font-bold">مشروع 1</div>
-                            <ProjectBriefStats
-                                comments={'10'}
-                                contributions="5"
-                                issues={'1'}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </Card.CardItem>
+            <FetchingCard data={data} error={error}>
+                {data &&
+                    data.data?.map((item: projectDataType, index) => (
+                        <Card.CardItem>
+                            <div>
+                                <Link href={`/${item.issuesCount}`}>
+                                    <a
+                                        href=""
+                                        className="text-sm text-primary font-bold">
+                                        {item.name}
+                                    </a>
+                                </Link>
+                                <div className="text-sm text-primary-text mt-2 opacity-50">
+                                    {item.description}
+                                </div>
+                                <ProjectBriefStats
+                                    contributions={item.contributionsCount}
+                                    issues={item.issuesCount}
+                                />
+                            </div>
+                        </Card.CardItem>
+                    ))}
+            </FetchingCard>
         </Card>
     )
 }
 
 const TrendingProjects = () => {
+    const { data, error } = useSWR(`/api/projects/trending`, fetcher)
     return (
         <Card>
             <Card.CardHeader>
@@ -59,64 +79,33 @@ const TrendingProjects = () => {
                     الأكثر مساهمة، تعليقات، قضايا خلال الأسبوع
                 </span>
             </Card.CardHeader>
-            <Card.CardItem>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                        <div className="ml-2">
-                            <div className="text-sm font-bold">مشروع 1</div>
-                            <ProjectBriefStats
-                                comments={'10'}
-                                contributions="5"
-                                issues={'1'}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </Card.CardItem>
+            <FetchingCard data={data} error={error}>
+                {data &&
+                    data.data?.map((item: projectDataType, index) => (
+                        <Card.CardItem>
+                            <div>
+                                <Link href={`/${item.issuesCount}`}>
+                                    <a
+                                        href=""
+                                        className="text-sm text-primary font-bold">
+                                        {item.name}
+                                    </a>
+                                </Link>
+                                <div className="text-sm text-primary-text mt-2 opacity-50 line-clamp-2 hover:line-clamp-none transition-all duration-300 ease-in-out ">
+                                    {item.description}
+                                </div>
+                                <ProjectBriefStats
+                                    contributions={item.contributionsCount}
+                                    issues={item.issuesCount}
+                                />
+                            </div>
+                        </Card.CardItem>
+                    ))}
+            </FetchingCard>
         </Card>
     )
 }
 
-const RelatedProjects = () => {
-    return (
-        <div className="">
-            <Card>
-                <Card.CardHeader>
-                    مشاريع ذات صلة{' '}
-                    <span className="text-xs opacity-50 mr-2">
-                        بناء على الأهتمامات
-                    </span>
-                </Card.CardHeader>
-                <Card.CardItem>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <div className="ml-2">
-                                <div className="text-sm  text-primary-text font-bold">
-                                    مشروع 1
-                                </div>
-                                <div className="text-sm text-primary-text opacity-50 mt-2">
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Illo eligendi alias
-                                    doloribus nostrum exercitationem tempora
-                                    voluptas distinctio nihil eum, eaque qui
-                                    excepturi totam labore inventore?
-                                    Praesentium consequatur maiores cum
-                                    consectetur.
-                                </div>
-
-                                <ProjectBriefStats
-                                    comments={'10'}
-                                    contributions="5"
-                                    issues={'1'}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </Card.CardItem>
-            </Card>
-        </div>
-    )
-}
 const UserIntrests = () => {
     return (
         <div className="">
@@ -130,7 +119,7 @@ const UserIntrests = () => {
     )
 }
 
-const ProjectBriefStats = ({ contributions, comments, issues }) => {
+const ProjectBriefStats = ({ contributions, issues }) => {
     return (
         <div className="flex item-center mt-2   rtl">
             <div className="text-xs text-primary-text opacity-50 ml-4">
@@ -139,12 +128,12 @@ const ProjectBriefStats = ({ contributions, comments, issues }) => {
                     <span className="mr-1">مساهمات: {contributions}</span>
                 </div>
             </div>
-            <div className="text-xs text-primary-text opacity-50 ml-4">
+            {/* <div className="text-xs text-primary-text opacity-50 ml-4">
                 <div className="flex item-center">
                     <SaveAs />
                     <span className="mr-1">تعليقات: {comments}</span>
                 </div>
-            </div>
+            </div> */}
             <div className="text-xs text-primary-text opacity-50 ml-4">
                 <div className="flex item-center">
                     <Newspaper />

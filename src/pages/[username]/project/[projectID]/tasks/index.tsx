@@ -43,7 +43,7 @@ export default function Tasks({ data, errors, username, projectID }) {
         },
     ])
     return (
-        <ProjectLayout description={data?.description}>
+        <ProjectLayout>
             <div className="grid grid-cols-4 gap-5 pb-5 rtl">
                 {tasks.map((task, index) => {
                     return (
@@ -101,7 +101,6 @@ const Task = ({ title, description }) => {
                             value={editing.title}
                             onChange={onChange}
                             className="text-primary-text py-0.5 bg-white bg-opacity-70  outline-none border border-slate-200 text-sm"
-                            autoFocus
                             onKeyUp={(e: any) => {
                                 if (e.key == 'Enter') {
                                     if (e.target.value.split(' ') == '') {
@@ -180,7 +179,6 @@ const Task = ({ title, description }) => {
                     className="text-primary-text  rounded-sm    outline-none border-0 border-t
                     border-slate-200
                     text-sm w-full "
-                    autoFocus
                     onKeyUp={(e: any) => {
                         if (e.key == 'Enter') {
                             if (e.target.value.split(' ') == '') {
@@ -225,7 +223,6 @@ const TaskItem = ({ goalTitle }) => {
                         value={editing.goalTitle}
                         onChange={onChange}
                         className="text-primary-text py-0.5 px-0 bg-white bg-opacity-70  outline-none border border-slate-200 text-sm"
-                        autoFocus
                         onKeyUp={(e: any) => {
                             if (e.key == 'Enter') {
                                 if (e.target.value.split(' ') == '') {

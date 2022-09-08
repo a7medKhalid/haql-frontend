@@ -28,16 +28,23 @@ export const Contributions = ({ data }) => {
                         <ContributionItem
                             name={item?.title}
                             id={item?.id}
-                            status=""
+                            status={item.status}
                             info={
                                 <>
                                     <ContributionInfoItem
                                         info={`#${item.id}`}
                                     />
+                                    <Link
+                                        href={`/${item.contributor.username}`}>
+                                        <a className="hover:underline">
+                                            <ContributionInfoItem
+                                                info={`${item.contributor.username}/${item.contributor.name}`}
+                                            />
+                                        </a>
+                                    </Link>
                                     <ContributionInfoItem
-                                        info={`${item.contributor.username}/${item.contributor.name}`}
+                                        info={item?.created_at}
                                     />
-                                    <ContributionInfoItem info={'٢٠٢١/٠٧/١٠'} />
                                 </>
                             }
                         />
@@ -65,15 +72,15 @@ export const ContributionItem = ({ name, info, status, id }) => {
                             {name}
                         </a>
                     </Link>
-                    <div className="flex items-center text-xs text-gray-500 mt-2">
+                    <div className="flex items-center text-xs flex-wrap text-gray-500 mt-2">
                         {info}
                     </div>
                 </div>
             </div>
             <div className="flex items-center">
                 <div className="flex flex-col">
-                    <div className="text-sm font-bold">١٠٠</div>
-                    <div className="text-xs text-gray-500">نقطة</div>
+                    <div className="text-sm font-bold">{status}</div>
+                    <div className="text-xs text-gray-500">الحالة</div>
                 </div>
             </div>
         </div>

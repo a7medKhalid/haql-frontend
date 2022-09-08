@@ -20,6 +20,9 @@
 .bold {
     font-family: 'Montserrat-Arabic-Bold', sans-serif;
 }
+.montserrat-regular {
+    font-family: 'Montserrat-Arabic', sans-serif;
+}
 .rtl {
     direction: rtl;
 }

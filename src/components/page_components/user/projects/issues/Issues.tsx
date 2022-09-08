@@ -27,12 +27,18 @@ export const Issues = ({ data }) => {
                         <IssueItem
                             name={item?.title}
                             id={item?.id}
-                            status=""
+                            status={item?.status}
                             info={
                                 <>
                                     <IssueInfoItem info={`#${item.id}`} />
-                                    <IssueInfoItem info={'فيصل حداد'} />
-                                    <IssueInfoItem info={'٢٠٢١/٠٧/١٠'} />
+                                    <Link href={`/${item.user.username}`}>
+                                        <a className="hover:underline">
+                                            <IssueInfoItem
+                                                info={`${item.user.username}/${item.user.name}`}
+                                            />
+                                        </a>
+                                    </Link>
+                                    <IssueInfoItem info={item?.created_at} />
                                 </>
                             }
                         />
@@ -55,20 +61,20 @@ export const IssueItem = ({ name, info, status, id }) => {
                 <div className="w-10 h-10 rounded-full bg-gray-300"></div>
                 <div className="flex flex-col mr-3">
                     <Link
-                        href={`/${router.query.username}/${router.query.projectID}/issues/${id}`}>
+                        href={`/${router.query.username}/project/${router.query.projectID}/issues/${id}`}>
                         <a className='className="text-sm text-primary hover:underline cursor-pointer font-bold"'>
                             {name}
                         </a>
                     </Link>
-                    <div className="flex items-center text-xs text-gray-500 mt-2">
+                    <div className="flex items-center text-xs flex-wrap text-gray-500 mt-2">
                         {info}
                     </div>
                 </div>
             </div>
             <div className="flex items-center">
                 <div className="flex flex-col">
-                    <div className="text-sm font-bold">١٠٠</div>
-                    <div className="text-xs text-gray-500">نقطة</div>
+                    <div className="text-sm font-bold">{status}</div>
+                    <div className="text-xs text-gray-500">الحالة</div>
                 </div>
             </div>
         </div>

@@ -19,7 +19,8 @@ export const CardHeader = ({ children, className = '' }) => {
 
 export const CardItem = ({ children, className = '' }) => {
     return (
-        <div className="flex items-center justify-end border-b border-neutral-300 p-5  text-sm">
+        <div
+            className={`flex items-center justify-end border-b border-neutral-300 p-5  text-sm ${className}`}>
             {children}
         </div>
     )

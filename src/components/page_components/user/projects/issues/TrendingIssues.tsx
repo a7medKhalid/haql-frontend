@@ -1,26 +1,37 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
+import { fetcher } from '../../../../../lib/fetcher'
 import { Card, CardItem } from '../../../../common/Card'
+import { FetchingCard } from '../../../../common/FetchingCard'
 
-export const TrendingIssues = ({ data }) => {
+export const TrendingIssues = () => {
+    const router = useRouter()
+
+    const { data, error } = useSWR(
+        `/api/projects/${router.query.projectID}/issues/trending`,
+        fetcher,
+    )
+
     return (
-        <Card>
-            <>
+        <FetchingCard data={data} error={error}>
+            <Card>
                 <Card.CardHeader>أبرز القضايا</Card.CardHeader>
-                <IssueCard
-                    name="تصميم صفحة الهبوط"
-                    commentsCount="3"
-                    avatar={''}
-                />
-                <IssueCard
-                    name="اضافة ميزة الفواصل"
-                    commentsCount="1"
-                    avatar={''}
-                />
-            </>
-        </Card>
+                {data?.data?.map(issue => (
+                    <IssueCard
+                        key={issue.id}
+                        id={issue.id}
+                        name={issue.title}
+                        commentsCount={issue.comments_count}
+                    />
+                ))}
+            </Card>
+        </FetchingCard>
     )
 }
 
-export const IssueCard = ({ name, commentsCount, avatar }) => {
+export const IssueCard = ({ id, name, commentsCount }) => {
+    const router = useRouter()
     const pluralize = (word, count) => {
         const letters = word.split('')
         if (count == 1) {
@@ -37,9 +48,12 @@ export const IssueCard = ({ name, commentsCount, avatar }) => {
     return (
         <CardItem>
             <div className="flex flex-col">
-                <div className="text-primary font-bold hover:underline cursor-pointer">
-                    {name}
-                </div>
+                <Link
+                    href={`/${router.query.username}/project/${router.query.projectID}/issues/${id}`}>
+                    <div className="text-primary font-bold hover:underline cursor-pointer">
+                        {name}
+                    </div>
+                </Link>
                 <div className="text-primary-text opacity-50 rtl">
                     {pluralize('تعليق', commentsCount)}
                 </div>

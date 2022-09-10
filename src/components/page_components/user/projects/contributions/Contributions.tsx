@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { LOCALE_WORDS } from '../../../../../lib/generalHelpers'
 import { Card, CardItem } from '../../../../common/Card'
 
 export const Contributions = ({ data }) => {
@@ -78,8 +79,10 @@ export const ContributionItem = ({ name, info, status, id }) => {
                 </div>
             </div>
             <div className="flex items-center">
-                <div className="flex flex-col">
-                    <div className="text-sm font-bold">{status}</div>
+                <div className="flex flex-col text-left">
+                    <div className="text-sm font-bold">
+                        {LOCALE_WORDS.ar[status]}
+                    </div>
                     <div className="text-xs text-gray-500">الحالة</div>
                 </div>
             </div>

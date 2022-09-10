@@ -23,7 +23,7 @@ export default function contributions({ data, errors, username, projectID }) {
                         <Contributions data={data} />
                     </div>
                     <div className="col-span-12 lg:col-span-1">
-                        <Contributers data={data} />
+                        <Contributers />
                     </div>
                 </div>
             </div>

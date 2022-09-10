@@ -16,13 +16,13 @@ const DropdownLink = ({ children, ...props }) => (
     </Menu.Item>
 )
 
-export const DropdownButton = ({ children, ...props }) => (
+export const DropdownButton = ({ children, className = '', ...props }) => (
     <Menu.Item>
         {({ active }) => (
             <button
-                className={`w-full text-right block px-4 py-2 text-sm leading-5 text-primary-text  ${
+                className={`w-full text-right block px-4 py-2 text-sm leading-5 text-primary-text z-50 ${
                     active ? 'bg-neutral-200' : ''
-                } focus:outline-none transition duration-150 ease-in-out`}
+                } focus:outline-none transition duration-150 ease-in-out ${className}`}
                 {...props}>
                 {children}
             </button>

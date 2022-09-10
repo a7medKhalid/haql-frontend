@@ -15,3 +15,18 @@ export const MAP_ROUTE_TO_ICON = {
     '/contributions': <SaveAs />,
     '/tasks': <Layout />,
 }
+
+export const LOCALE_WORDS = {
+    en: {
+        days: 'days',
+        hours: 'hours',
+        minutes: 'minutes',
+        seconds: 'seconds',
+    },
+    ar: {
+        open: 'مفتوح',
+        closed: 'مغلق',
+        archived: 'مؤرشف',
+        accepted: 'معتمدة',
+    },
+}

@@ -1,32 +1,30 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
+import { fetcher } from '../../../../../lib/fetcher'
 import { Card, CardItem } from '../../../../common/Card'
+import { FetchingCard } from '../../../../common/FetchingCard'
 
-export const Contributers = ({ data }) => {
+export const Contributers = () => {
+    const router = useRouter()
+    const { data, error } = useSWR(
+        `/api/projects/${router.query.projectID}/contributors`,
+        fetcher,
+    )
+
     return (
-        <Card>
-            <>
+        <FetchingCard data={data} error={error}>
+            <Card>
                 <Card.CardHeader>المساهمين</Card.CardHeader>
-                <ContributerCard
-                    name="محمد عبدالله"
-                    contributionsCount="3"
-                    avatar={''}
-                />
-                <ContributerCard
-                    name="محمد ماهر"
-                    contributionsCount="1"
-                    avatar={''}
-                />
-                <ContributerCard
-                    name="احمد عبيد"
-                    contributionsCount="2"
-                    avatar={''}
-                />
-                <ContributerCard
-                    name="احمد عبيد"
-                    contributionsCount="20"
-                    avatar={''}
-                />
-            </>
-        </Card>
+                {data?.data?.map(contributor => (
+                    <ContributerCard
+                        name={contributor.name + '/' + contributor.username}
+                        contributionsCount={contributor.contributionsCount}
+                        avatar={''}
+                    />
+                ))}
+            </Card>
+        </FetchingCard>
     )
 }
 
@@ -52,9 +50,12 @@ export const ContributerCard = ({ name, contributionsCount, avatar }) => {
     return (
         <CardItem>
             <div className="flex flex-col">
-                <div className="text-primary font-bold hover:underline cursor-pointer">
-                    {name}
-                </div>
+                <Link href={`/${name.split('/')[1]}`}>
+                    <div className="text-primary font-bold hover:underline cursor-pointer">
+                        {name}
+                    </div>
+                </Link>
+
                 <div className="text-primary-text opacity-50 rtl">
                     {pluralize('مساهم', contributionsCount)}
                 </div>

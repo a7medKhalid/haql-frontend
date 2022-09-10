@@ -16,6 +16,7 @@ import useSWR from 'swr'
 import { fetcher } from '../../../../../lib/fetcher'
 import { useRouter } from 'next/router'
 import useSubmit from '../../../../../hooks/useSubmit'
+import { LOCALE_WORDS } from '../../../../../lib/generalHelpers'
 
 export async function getServerSideProps(context) {
     const { username, projectID, contribution_id } = context.params
@@ -70,8 +71,8 @@ export default function Contribution({ data, contribution_id }) {
                                 </div>
                             </div>
                         </Card>
-                        <Comments />
-                        <AddComment />
+                        <Comments model="contributions" />
+                        <AddComment model="contributions" />
                     </div>
                     <div className="col-span-1">
                         <Card>
@@ -79,7 +80,7 @@ export default function Contribution({ data, contribution_id }) {
                             <CardItem>
                                 <ProjectDetailItem
                                     title={'الحالة'}
-                                    value={details.status}
+                                    value={LOCALE_WORDS.ar[details.status]}
                                 />
                             </CardItem>
                             <CardItem>
@@ -144,10 +145,7 @@ const AcceptContributionButton = ({ details }) => {
         <CardItem>
             <AnimatedSideBar
                 trigger={
-                    <Button
-                        onClick={() => {
-                            console.log('accept')
-                        }}>
+                    <Button>
                         <ChevronDoubleIcon classname="mr-2 w-5 h-5" />
                         قبول المساهمة
                     </Button>
@@ -270,7 +268,7 @@ const ProjectDetailSpecialtiesItem = ({ title }) => {
 
 const ProjectDetailItem = ({ title, value }) => {
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col items-end">
             <div className="text-primary-text font-bold hover:underline cursor-pointer">
                 {title}
             </div>

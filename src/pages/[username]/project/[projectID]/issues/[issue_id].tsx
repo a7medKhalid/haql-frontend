@@ -15,6 +15,7 @@ import { FetchingCard } from '../../../../../components/common/FetchingCard'
 import axios from '../../../../../lib/axios'
 import useSubmit from '../../../../../hooks/useSubmit'
 import { useRouter } from 'next/router'
+import { LOCALE_WORDS } from '../../../../../lib/generalHelpers'
 
 export async function getServerSideProps(context) {
     const { issue_id } = context.params
@@ -33,7 +34,6 @@ export default function Issue({ data }) {
         createdAt: data?.created_at,
         status: data?.status,
     }
-    console.log(data)
 
     return (
         <ProjectLayout>
@@ -65,8 +65,8 @@ export default function Issue({ data }) {
                                 </div>
                             </div>
                         </Card>
-                        <Comments />
-                        <AddComment />
+                        <Comments model="issues" />
+                        <AddComment model="issues" />
                     </div>
                     <div className="col-span-1">
                         <CardDetails details={details} />
@@ -82,7 +82,10 @@ const CardDetails = ({ details }) => {
         <Card>
             <Card.CardHeader>تفاصيل القضية</Card.CardHeader>
             <CardItem>
-                <ProjectDetailItem title={'الحالة'} value={details.status} />
+                <ProjectDetailItem
+                    title={'الحالة'}
+                    value={LOCALE_WORDS.ar[details.status]}
+                />
             </CardItem>
             <CardItem>
                 <ProjectDetailItem
@@ -116,8 +119,6 @@ const IssueStatus = ({ id }) => {
         return null
     }
     const changeStatus = e => {
-        console.log(e.target.value)
-
         send({
             payload: {
                 status: e.target.value,
@@ -126,8 +127,6 @@ const IssueStatus = ({ id }) => {
             method: 'put',
             url: '/api/issues/',
             onSuccess: a => {
-                console.log(a)
-
                 const refreshData = () => {
                     router.replace(router.asPath)
                 }

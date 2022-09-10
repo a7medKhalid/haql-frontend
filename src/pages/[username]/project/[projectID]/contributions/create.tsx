@@ -20,7 +20,7 @@ export default function create() {
 
     const [formState, setFormState] = useState<any>({
         project_id: router.query.projectID,
-        title: '',
+        title: router.query?.title ? router.query?.title : '',
         description: '',
         link: '',
     })

@@ -24,7 +24,7 @@ export default function issues({ data, errors, projectID }) {
                         <Issues data={data} />
                     </div>
                     <div className="col-span-12 lg:col-span-1">
-                        <TrendingIssues data={data} />
+                        <TrendingIssues />
                     </div>
                 </div>
             </div>

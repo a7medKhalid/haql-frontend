@@ -37,7 +37,6 @@ const SideBar = () => {
 
 const LatestProjects = () => {
     const { data, error } = useSWR(`/api/projects`, fetcher)
-    console.log({ data })
 
     return (
         <Card>

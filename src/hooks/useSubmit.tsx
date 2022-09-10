@@ -28,7 +28,7 @@ const useSubmit = () => {
                 }
             })
             .catch(error => {
-                console.log(error)
+                console.log(error?.response?.data)
                 // if (error.response.status !== 422) throw error
                 setErrors(error.response.data?.errors)
             })

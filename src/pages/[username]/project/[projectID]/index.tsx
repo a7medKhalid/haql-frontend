@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import useSWR from 'swr'
-import Card from '../../../../components/common/Card'
+import Card, { CardItem } from '../../../../components/common/Card'
 import { FetchingCard } from '../../../../components/common/FetchingCard'
 import AppLayout from '../../../../components/Layouts/AppLayout'
 import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
@@ -16,34 +16,78 @@ export async function getServerSideProps(context) {
     const { data, errors } = await getData(
         `/api/projects/${projectID}/contributions?status=accepted`,
     )
+    const { data: projectInfo } = await getData(`/api/projects/${projectID}`)
 
     // Pass data to the page via props
-    return { props: { data, errors } }
+    return { props: { data, errors, projectInfo } }
 }
-export default function projectName({ data, errors, username, projectID }) {
+export default function projectName({
+    data,
+    errors,
+    username,
+    projectID,
+    projectInfo,
+}) {
     const router = useRouter()
+    console.log({ projectInfo })
 
     return (
         <ProjectLayout projectData={data}>
-            <div>
-                <FetchingCard data={data} error={errors}>
-                    <Card className="mt-4">
-                        <Card.CardHeader>
-                            <div className="opacity-70">
-                                دمج #12 إضافة الشعار، بواسطة فيصل حداد
-                            </div>
-                        </Card.CardHeader>
-                        {data?.data?.map(contribution => (
-                            <Card.CardItem key={contribution.id}>
-                                <ContributionItem
-                                    username={`${contribution.contributor.name}/${contribution.contributor.username}`}
-                                    contribution_id={contribution.id}
-                                    name={contribution.title}
-                                />
-                            </Card.CardItem>
-                        ))}
-                    </Card>
-                </FetchingCard>
+            <div className="grid grid-cols-4 gap-5">
+                <Card className="col-span-12 lg:col-span-3">
+                    <Card.CardHeader>
+                        <div className="opacity-70">
+                            دمج #12 إضافة الشعار، بواسطة فيصل حداد
+                        </div>
+                    </Card.CardHeader>
+                    {data?.data?.map(contribution => (
+                        <Card.CardItem key={contribution.id}>
+                            <ContributionItem
+                                username={`${contribution.contributor.name}/${contribution.contributor.username}`}
+                                contribution_id={contribution.id}
+                                name={contribution.title}
+                            />
+                        </Card.CardItem>
+                    ))}
+                </Card>
+
+                <Card className="col-span-12 lg:col-span-1">
+                    <Card.CardHeader>
+                        <div className="opacity-70">معلومات المشروع</div>
+                    </Card.CardHeader>
+                    <CardItem>
+                        <ProjectDetailItem
+                            title={'اسم المشروع'}
+                            value={projectInfo?.name}
+                        />
+                    </CardItem>
+                    <CardItem>
+                        <ProjectDetailItem
+                            title={'وصف المشروع'}
+                            value={projectInfo?.description}
+                        />
+                    </CardItem>
+                    <CardItem>
+                        <ProjectDetailItem
+                            title={'صاحب المشروع'}
+                            value={router.query.username}
+                        />
+                    </CardItem>
+                    <CardItem>
+                        <ProjectDetailItem
+                            title={'تاريخ الإنشاء'}
+                            value={projectInfo?.created_at}
+                        />
+                    </CardItem>
+                    <CardItem>
+                        <a
+                            href={`/${router.query.username}/project/${router.query.projectID}/info`}
+                            target="_blank"
+                            className="text-primary hover:underline cursor-pointer text-sm">
+                            صفحة مشاركة
+                        </a>
+                    </CardItem>
+                </Card>
             </div>
         </ProjectLayout>
     )
@@ -62,6 +106,15 @@ export const ContributionItem = ({ username, contribution_id, name }) => {
                 </div>
             </div>
             <div className="text-primary-text text-lg">{name}</div>
+        </div>
+    )
+}
+
+const ProjectDetailItem = ({ title, value }) => {
+    return (
+        <div className="flex flex-col">
+            <div className="text-primary-text font-bold ">{title}</div>
+            <div className="text-primary-text opacity-50 rtl mt-2">{value}</div>
         </div>
     )
 }

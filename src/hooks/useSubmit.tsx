@@ -30,7 +30,15 @@ const useSubmit = () => {
             .catch(error => {
                 console.log(error?.response?.data)
                 // if (error.response.status !== 422) throw error
-                setErrors(error.response.data?.errors)
+                if (error?.response?.data?.errors?.length > 0) {
+                    console.log('ffasdfs')
+
+                    setErrors(error.response.data.errors)
+                } else {
+                    console.log('asd')
+
+                    setErrors(error.response.data?.message)
+                }
             })
             .finally(() => setLoading(false))
     }

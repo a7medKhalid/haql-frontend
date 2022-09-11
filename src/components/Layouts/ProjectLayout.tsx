@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { useAuth } from '../../hooks/useAuth'
 import {
     CogIcon,
     DocumentTextIcon,
@@ -21,7 +22,7 @@ interface props {
 }
 export default function ProjectLayout({ children, projectData }: props) {
     const router = useRouter()
-
+    const { user } = useAuth({})
     return (
         <AppLayout
             variant="default"
@@ -55,13 +56,15 @@ export default function ProjectLayout({ children, projectData }: props) {
                         </div>
                         المهام
                     </TabLink>
-                    <TabLink
-                        href={`/${router.query.username}/project/${router.query.projectID}/settings`}>
-                        <div className="flex items-center  ml-2">
-                            <CogIcon />
-                        </div>
-                        الإعدادات
-                    </TabLink>
+                    {user?.username == router.query.username && (
+                        <TabLink
+                            href={`/${router.query.username}/project/${router.query.projectID}/settings`}>
+                            <div className="flex items-center  ml-2">
+                                <CogIcon />
+                            </div>
+                            الإعدادات
+                        </TabLink>
+                    )}
                 </div>
             }>
             <div>{children}</div>

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../../../../components/Button'
+import AnimatedSideBar from '../../../../../components/common/AnimatedSideBar'
 import Card from '../../../../../components/common/Card'
 import TextArea from '../../../../../components/common/TextArea'
 import Input from '../../../../../components/Input'
@@ -57,11 +58,31 @@ export default function settings({ data }) {
             },
         })
     }
+    const deleteProject = () => {
+        send({
+            payload: {
+                project_id: data.id,
+            },
+            url: `/api/projects?project_id=${data.id}`,
+            method: 'delete',
+            onSuccess: a => {
+                router.push('/[username]', `/${user.username}`)
+            },
+        })
+    }
+    // useEffect(() => {
+    //     if (user?.username !== router.query.username) {
+    //         router.push('/')
+    //     }
+    // }, [user])
+    console.log({ errors })
+
     return (
         <ProjectLayout>
             <div className="flex items-center justify-center">
                 <Card className="w-[70vh] ">
                     <Card.CardHeader>تعديل المشروع</Card.CardHeader>
+
                     <form onSubmit={submitForm}>
                         <Card.CardItem className="w-full">
                             <ProjectDetailItem title="اسم المشروع">
@@ -77,7 +98,7 @@ export default function settings({ data }) {
                             </ProjectDetailItem>
                         </Card.CardItem>
                         <Card.CardItem>
-                            <ProjectDetailItem title="وصف المشروع">
+                            <ProjectDetailItem title="">
                                 <TextArea
                                     name={'description'}
                                     value={formState.description}
@@ -87,18 +108,40 @@ export default function settings({ data }) {
                             </ProjectDetailItem>
                         </Card.CardItem>
                         <Card.CardItem>
-                            <ProjectDetailItem title="تعديل المشروع">
+                            <ProjectDetailItem title="">
                                 <Button>تعديل</Button>
                             </ProjectDetailItem>
                         </Card.CardItem>
                     </form>
 
                     <Card.CardItem>
-                        <ProjectDetailItem title="حذف المشروع">
-                            <Button className="bg-red-500 border-b-red-700 hover:bg-red-600">
-                                حذف المشروع
-                            </Button>
-                        </ProjectDetailItem>
+                        <AnimatedSideBar
+                            trigger={
+                                <ProjectDetailItem title="حذف المشروع">
+                                    <Button className="bg-red-500 border-b-red-700 hover:bg-red-600">
+                                        حذف المشروع
+                                    </Button>
+                                </ProjectDetailItem>
+                            }>
+                            <div>
+                                <Card.CardHeader>
+                                    {errors?.length > 0 && (
+                                        <div className="bg-red-200 border border-red-300 text-red-700 text-center py-4 px-5 w-full rounded mb-7">
+                                            {errors}
+                                        </div>
+                                    )}
+                                    <div className="text-2xl bold">
+                                        هل أنت متأكد من حذف المشروع
+                                    </div>
+
+                                    <Button
+                                        className="mt-4 text-xs py-3 bg-red-500 border-b-red-700 hover:bg-red-600"
+                                        onClick={deleteProject}>
+                                        نعم، متأكد
+                                    </Button>
+                                </Card.CardHeader>
+                            </div>
+                        </AnimatedSideBar>
                     </Card.CardItem>
                 </Card>
             </div>

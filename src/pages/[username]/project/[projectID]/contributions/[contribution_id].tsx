@@ -40,14 +40,14 @@ export default function Contribution({ data, contribution_id }) {
         createdAt: data?.created_at,
         status: data?.status,
     }
-
     return (
         <ProjectLayout>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">
                         <Card>
-                            <Card.CardHeader className="py-0 pt-3 pb-3">
+                            <Card.CardHeader className="py-0 pt-3 pb-3 flex items-center justify-between">
+                                <DeleteContribution id={details.id} />
                                 <div className="flex items-center rtl">
                                     <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div>
                                     <Link
@@ -241,6 +241,60 @@ const AcceptedContributions = ({ details }) => {
                 ))}
             </Card>
         </FetchingCard>
+    )
+}
+
+const DeleteContribution = ({ id }) => {
+    const router = useRouter()
+    const { send } = useSubmit()
+    const { data, error } = useSWR(
+        `/api/permissions?model=contribution&model_id=${id}&permission=delete`,
+        fetcher,
+    )
+    const deleteContribution = () => {
+        send({
+            payload: {
+                contribution_id: id,
+            },
+            method: 'delete',
+            url: `/api/contributions?contribution_id=${id}`,
+            onSuccess: a => {
+                router.push(
+                    '/[username]/project/[projectID]/contributions',
+                    `/${router.query.username}/project/${router.query.projectID}/contributions`,
+                )
+            },
+        })
+    }
+
+    if (!data) {
+        return <div></div>
+    }
+    if (data?.message === false) {
+        return <div></div>
+    }
+    return (
+        <AnimatedSideBar
+            trigger={
+                <Button className="py-2 text-xs bg-red-500 border-b-red-700 hover:bg-red-600">
+                    <ChevronDoubleIcon classname="mr-2 w-5 h-5" />
+                    حذف المساهمة
+                </Button>
+            }>
+            <div>
+                <Card.CardHeader>
+                    <div className="text-2xl bold">
+                        هل أنت متأكد من حذف المساهمة
+                    </div>
+
+                    <Button
+                        className="mt-4 text-xs py-3 bg-red-500 border-b-red-700 hover:bg-red-600"
+                        onClick={deleteContribution}>
+                        نعم، متأكد
+                    </Button>
+                </Card.CardHeader>
+            </div>
+        </AnimatedSideBar>
     )
 }
 

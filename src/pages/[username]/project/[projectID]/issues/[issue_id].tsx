@@ -16,6 +16,9 @@ import axios from '../../../../../lib/axios'
 import useSubmit from '../../../../../hooks/useSubmit'
 import { useRouter } from 'next/router'
 import { LOCALE_WORDS } from '../../../../../lib/generalHelpers'
+import AnimatedSideBar from '../../../../../components/common/AnimatedSideBar'
+import Button from '../../../../../components/Button'
+import { ChevronDoubleIcon } from '../../../../../components/common/HeroIcons'
 
 export async function getServerSideProps(context) {
     const { issue_id } = context.params
@@ -41,7 +44,8 @@ export default function Issue({ data }) {
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">
                         <Card>
-                            <Card.CardHeader className="py-0 pt-3 pb-3">
+                            <Card.CardHeader className="py-0 pt-3 pb-3 flex items-center justify-between">
+                                <DeleteIssue id={details.id} />
                                 <div className="flex items-center rtl">
                                     <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div>
                                     <Link
@@ -150,6 +154,43 @@ const IssueStatus = ({ id }) => {
                 </select>
             </div>
         </CardItem>
+    )
+}
+
+const DeleteIssue = ({ id }) => {
+    const deleteIssue = () => {}
+    const { data, error } = useSWR(
+        `/api/permissions?model=issue&model_id=${id}&permission=delete`,
+        fetcher,
+    )
+    if (!data) {
+        return <div></div>
+    }
+    if (data?.message === false) {
+        return <div></div>
+    }
+    return (
+        <AnimatedSideBar
+            trigger={
+                <Button className="py-2 text-xs bg-red-500 border-b-red-700 hover:bg-red-600">
+                    <ChevronDoubleIcon classname="mr-2 w-5 h-5" />
+                    حذف القضية
+                </Button>
+            }>
+            <div>
+                <Card.CardHeader>
+                    <div className="text-2xl bold">
+                        هل أنت متأكد من حذف القضية
+                    </div>
+
+                    <Button
+                        className="mt-4 text-xs py-3 bg-red-500 border-b-red-700 hover:bg-red-600"
+                        onClick={deleteIssue}>
+                        نعم، متأكد
+                    </Button>
+                </Card.CardHeader>
+            </div>
+        </AnimatedSideBar>
     )
 }
 const ProjectDetailSpecialties = ({ specialties }) => {

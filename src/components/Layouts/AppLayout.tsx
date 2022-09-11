@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { capitalizeFirstLetter } from '../../lib/generalHelpers'
 import { DocumentTextIcon, UsersGroup } from '../common/HeroIcons'
 import { TabLink } from '../common/TabLink'
+import Footer from '../Footer'
 import Navigation from './Navigation'
 
 interface props {
@@ -72,6 +73,7 @@ const AppLayout = ({
             {/* Page Content */}
             <main className={`mt-5 px-4 sm:px-6 lg:px-16 ${contentClassname}`}>
                 {children}
+                {variant == 'default' && children != null && <Footer />}
             </main>
         </div>
     )

@@ -4,7 +4,7 @@ import { Menu, Transition } from '@headlessui/react'
 const Dropdown = ({
     align = 'right',
     width = '48',
-    contentClasses = 'py-1 bg-white',
+    contentClasses = 'py-1',
     alignClass = '',
     trigger,
     children,
@@ -47,9 +47,9 @@ const Dropdown = ({
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95">
                         <div
-                            className={`absolute z-50 mt-2 ${width} rounded-md shadow-lg ${alignmentClasses} ${alignClass}`}>
+                            className={`absolute  z-50 mt-2 ${width} rounded-md shadow-lg ${alignmentClasses} ${alignClass}`}>
                             <Menu.Items
-                                className={`rounded-md focus:outline-none bg-neutral-100 border border-neutral-300 ring-black ring-opacity-5 ${contentClasses}`}
+                                className={`rounded-md z-50 focus:outline-none bg-neutral-100 border border-neutral-300 ring-black ring-opacity-5 ${contentClasses}`}
                                 static>
                                 {children}
                             </Menu.Items>

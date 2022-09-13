@@ -1,3 +1,4 @@
+import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
@@ -7,6 +8,7 @@ import AnimatedSideBar from '../../../../components/common/AnimatedSideBar'
 import Card, { CardItem } from '../../../../components/common/Card'
 import { FetchingCard } from '../../../../components/common/FetchingCard'
 import { ChevronDoubleIcon } from '../../../../components/common/HeroIcons'
+import Pagination from '../../../../components/common/Pagination'
 import AppLayout from '../../../../components/Layouts/AppLayout'
 import ProjectLayout from '../../../../components/Layouts/ProjectLayout'
 import CreateContributionsForm from '../../../../components/page_components/user/projects/contributions/CreateContributionsForm'
@@ -15,12 +17,13 @@ import axios from '../../../../lib/axios'
 import { fetcher } from '../../../../lib/fetcher'
 import { getData } from '../../../../lib/getData'
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { username, projectID } = context.params
-
+    const { page } = context.query
+    const curPage = page || 1
     // Fetch data from external API
     const { data, errors } = await getData(
-        `/api/projects/${projectID}/contributions?status=accepted`,
+        `/api/projects/${projectID}/contributions?status=accepted&page=${curPage}`,
     )
     const { data: projectInfo } = await getData(`/api/projects/${projectID}`)
 
@@ -38,12 +41,13 @@ export default function projectName({
 
     return (
         <ProjectLayout projectData={data}>
-            <div className="grid grid-cols-4 gap-5">
+            <div className="grid grid-cols-4 gap-5 mb-5">
                 <Card className="col-span-12 lg:col-span-3 order-1 lg:order-0">
                     <ProjectAcceptedContributions
                         data={data}
                         projectID={projectInfo.id}
                     />
+                    <Pagination data={data} />
                 </Card>
 
                 <Card className="col-span-12 lg:col-span-1 lg:order-1">
@@ -64,6 +68,7 @@ const ProjectAcceptedContributions = ({ data, projectID }) => {
             </Card.CardHeader>
             {data?.data?.map(contribution => (
                 <Link
+                    key={contribution.id}
                     href={`/${router.query.username}/project/${router.query.projectID}/contributions/${contribution.id}`}>
                     <div>
                         <Card.CardItem

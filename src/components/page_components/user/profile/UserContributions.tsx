@@ -5,12 +5,15 @@ import { fetcher } from '../../../../lib/fetcher'
 import { getData } from '../../../../lib/getData'
 import Card from '../../../common/Card'
 import { FetchingCard } from '../../../common/FetchingCard'
+import Pagination from '../../../common/Pagination'
 
 export const UserContributions = () => {
     const router = useRouter()
 
     const { data, error } = useSWR(
-        `/api/users/${router.query.username}/contributions`,
+        `/api/users/${router.query.username}/contributions?page=${
+            router.query.page || 1
+        }`,
         fetcher,
     )
 
@@ -24,15 +27,18 @@ export const UserContributions = () => {
                     empty={
                         <div className="text-center py-4">لا يوجد مساهمات</div>
                     }>
-                    {data?.data?.length > 0 &&
-                        data?.data?.map((item, index) => (
-                            <UserContributionsItem
-                                key={item.id}
-                                title={item.title}
-                                username={router.query.username}
-                                description={item.description}
-                            />
-                        ))}
+                    {data?.data?.length > 0 && (
+                        <>
+                            {data?.data?.map((item, index) => (
+                                <UserContributionsItem
+                                    key={item.id}
+                                    title={item.title}
+                                    username={router.query.username}
+                                    description={item.description}
+                                />
+                            ))}
+                        </>
+                    )}
                 </FetchingCard>
             </div>
         </Card>

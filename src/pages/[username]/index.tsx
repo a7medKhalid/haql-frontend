@@ -1,5 +1,6 @@
 import React from 'react'
 import Card from '../../components/common/Card'
+import Pagination from '../../components/common/Pagination'
 import AppLayout from '../../components/Layouts/AppLayout'
 import { UserContributions } from '../../components/page_components/user/profile/UserContributions'
 import { UserInfo } from '../../components/page_components/user/profile/UserInfo'
@@ -8,7 +9,7 @@ import { UserProjects } from '../../components/page_components/user/profile/User
 export default function UserProfile() {
     return (
         <AppLayout>
-            <div className="grid grid-cols-4 gap-5 rtl">
+            <div className="grid grid-cols-4 gap-5 rtl mb-5">
                 <div className="col-span-1 ">
                     <UserInfo />
                 </div>

@@ -6,9 +6,11 @@ import { getData } from '../../../../../lib/getData'
 
 export async function getServerSideProps(context) {
     const { username, projectID } = context.params
+    const { page } = context.query
+    const curPage = page || 1
     // Fetch data from external API
     const { data, errors } = await getData(
-        `/api/projects/${projectID}/contributions`,
+        `/api/projects/${projectID}/contributions?page=${curPage}`,
     )
 
     // Pass data to the page via props

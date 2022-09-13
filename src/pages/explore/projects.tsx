@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import Card from '../../components/common/Card'
 import { FetchingCard } from '../../components/common/FetchingCard'
 import { Newspaper, SaveAs } from '../../components/common/HeroIcons'
+import Pagination from '../../components/common/Pagination'
 import { projectDataType } from '../../components/common/types'
 import AppLayout from '../../components/Layouts/AppLayout'
 import { fetcher } from '../../lib/fetcher'
@@ -36,33 +37,42 @@ const SideBar = () => {
 }
 
 const LatestProjects = () => {
-    const { data, error } = useSWR(`/api/projects`, fetcher)
+    const router = useRouter()
+
+    const { data, error } = useSWR(
+        `/api/projects?page=${router.query.page || 1}`,
+        fetcher,
+    )
 
     return (
         <Card>
             <Card.CardHeader>آخر المشاريع </Card.CardHeader>
             <FetchingCard data={data} error={error}>
-                {data &&
-                    data.data?.map((item: projectDataType, index) => (
-                        <Card.CardItem>
-                            <div>
-                                <Link href={`/${item.issuesCount}`}>
-                                    <a
-                                        href=""
-                                        className="text-sm text-primary font-bold">
-                                        {item.name}
-                                    </a>
-                                </Link>
-                                <div className="text-sm text-primary-text mt-2 opacity-50">
-                                    {item.description}
+                {data && (
+                    <>
+                        {data.data?.map((item: projectDataType, index) => (
+                            <Card.CardItem key={item.id}>
+                                <div>
+                                    <Link href={`/${item.issuesCount}`}>
+                                        <a
+                                            href=""
+                                            className="text-sm text-primary font-bold">
+                                            {item.name}
+                                        </a>
+                                    </Link>
+                                    <div className="text-sm text-primary-text mt-2 opacity-50">
+                                        {item.description}
+                                    </div>
+                                    <ProjectBriefStats
+                                        contributions={item.contributionsCount}
+                                        issues={item.issuesCount}
+                                    />
                                 </div>
-                                <ProjectBriefStats
-                                    contributions={item.contributionsCount}
-                                    issues={item.issuesCount}
-                                />
-                            </div>
-                        </Card.CardItem>
-                    ))}
+                            </Card.CardItem>
+                        ))}
+                        <Pagination data={data} />
+                    </>
+                )}
             </FetchingCard>
         </Card>
     )
@@ -81,7 +91,7 @@ const TrendingProjects = () => {
             <FetchingCard data={data} error={error}>
                 {data &&
                     data.data?.map((item: projectDataType, index) => (
-                        <Card.CardItem>
+                        <Card.CardItem key={item.id}>
                             <div>
                                 <Link href={`/${item.issuesCount}`}>
                                     <a

@@ -3,12 +3,13 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { LOCALE_WORDS } from '../../../../../lib/generalHelpers'
 import { Card, CardItem } from '../../../../common/Card'
+import Pagination from '../../../../common/Pagination'
 
 export const Contributions = ({ data }) => {
     const router = useRouter()
 
     return (
-        <Card>
+        <Card className="mb-5">
             <Card.CardHeader>
                 <div className="flex items-center justify-between">
                     <Link
@@ -24,33 +25,36 @@ export const Contributions = ({ data }) => {
                 </div>
             </Card.CardHeader>
             {data.data?.length > 0 ? (
-                data?.data?.map((item, index) => (
-                    <CardItem key={item.id}>
-                        <ContributionItem
-                            name={item?.title}
-                            id={item?.id}
-                            status={item.status}
-                            info={
-                                <>
-                                    <ContributionInfoItem
-                                        info={`#${item.id}`}
-                                    />
-                                    <Link
-                                        href={`/${item.contributor.username}`}>
-                                        <a className="hover:underline">
-                                            <ContributionInfoItem
-                                                info={`${item.contributor.username}/${item.contributor.name}`}
-                                            />
-                                        </a>
-                                    </Link>
-                                    <ContributionInfoItem
-                                        info={item?.created_at}
-                                    />
-                                </>
-                            }
-                        />
-                    </CardItem>
-                ))
+                <>
+                    {data?.data?.map((item, index) => (
+                        <CardItem key={item.id}>
+                            <ContributionItem
+                                name={item?.title}
+                                id={item?.id}
+                                status={item.status}
+                                info={
+                                    <>
+                                        <ContributionInfoItem
+                                            info={`#${item.id}`}
+                                        />
+                                        <Link
+                                            href={`/${item.contributor.username}`}>
+                                            <a className="hover:underline">
+                                                <ContributionInfoItem
+                                                    info={`${item.contributor.username}/${item.contributor.name}`}
+                                                />
+                                            </a>
+                                        </Link>
+                                        <ContributionInfoItem
+                                            info={item?.created_at}
+                                        />
+                                    </>
+                                }
+                            />
+                        </CardItem>
+                    ))}
+                    <Pagination data={data} />
+                </>
             ) : (
                 <div className="text-center text-gray-500 py-5">
                     لا توجد مساهمات

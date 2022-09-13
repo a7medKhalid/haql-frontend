@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { LOCALE_WORDS } from '../../../../../lib/generalHelpers'
 import { Card, CardItem } from '../../../../common/Card'
+import Pagination from '../../../../common/Pagination'
 export const Issues = ({ data }) => {
     const router = useRouter()
 
@@ -23,28 +24,33 @@ export const Issues = ({ data }) => {
                 </div>
             </Card.CardHeader>
             {data.data?.length > 0 ? (
-                data?.data?.map((item, index) => (
-                    <CardItem key={item.id}>
-                        <IssueItem
-                            name={item?.title}
-                            id={item?.id}
-                            status={item?.status}
-                            info={
-                                <>
-                                    <IssueInfoItem info={`#${item.id}`} />
-                                    <Link href={`/${item.user.username}`}>
-                                        <a className="hover:underline">
-                                            <IssueInfoItem
-                                                info={`${item.user.username}/${item.user.name}`}
-                                            />
-                                        </a>
-                                    </Link>
-                                    <IssueInfoItem info={item?.created_at} />
-                                </>
-                            }
-                        />
-                    </CardItem>
-                ))
+                <>
+                    {data?.data?.map((item, index) => (
+                        <CardItem key={item.id}>
+                            <IssueItem
+                                name={item?.title}
+                                id={item?.id}
+                                status={item?.status}
+                                info={
+                                    <>
+                                        <IssueInfoItem info={`#${item.id}`} />
+                                        <Link href={`/${item.user.username}`}>
+                                            <a className="hover:underline">
+                                                <IssueInfoItem
+                                                    info={`${item.user.username}/${item.user.name}`}
+                                                />
+                                            </a>
+                                        </Link>
+                                        <IssueInfoItem
+                                            info={item?.created_at}
+                                        />
+                                    </>
+                                }
+                            />
+                        </CardItem>
+                    ))}
+                    <Pagination data={data} />
+                </>
             ) : (
                 <div className="text-center text-gray-500 py-5">
                     لا توجد قضايا

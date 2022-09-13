@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
 import useSWR from 'swr'
 import Card from '../../components/common/Card'
@@ -8,16 +9,23 @@ import {
     Newspaper,
     SaveAs,
 } from '../../components/common/HeroIcons'
+import Pagination from '../../components/common/Pagination'
 import { userType } from '../../components/common/types'
 import AppLayout from '../../components/Layouts/AppLayout'
 import { fetcher } from '../../lib/fetcher'
 
 export default function Users() {
+    const router = useRouter()
+
     return (
         <AppLayout>
             <div className="grid grid-cols-4 gap-5">
                 <div className="col-span-12 lg:col-span-3">
-                    <WrapperContainer type="" title="آخر الحسابات" />
+                    <WrapperContainer
+                        type={`?page=${router.query.page || 1}`}
+                        title="آخر الحسابات"
+                        showPagination={true}
+                    />
                     {/* <LatestUsers /> */}
                 </div>
                 <div className="col-span-12 lg:col-span-1">
@@ -31,38 +39,42 @@ export default function Users() {
 const SideBar = () => {
     return (
         <div className="grid grid-cols-1 gap-5">
-            <WrapperContainer type="most-contributors" title="الأكثر مساهمة" />
-            <WrapperContainer type="most-projects" title="الأكثر مشاريعًا" />
+            <WrapperContainer type="/most-contributors" title="الأكثر مساهمة" />
+            <WrapperContainer type="/most-projects" title="الأكثر مشاريعًا" />
         </div>
     )
 }
 
-const WrapperContainer = ({ type = '', title }) => {
-    const { data, error } = useSWR(`/api/users/${type}`, fetcher)
+const WrapperContainer = ({ type = '', title, showPagination = false }) => {
+    const { data, error } = useSWR(`/api/users${type}`, fetcher)
 
     return (
         <Card>
             <Card.CardHeader>{title}</Card.CardHeader>
             <FetchingCard data={data} error={error}>
-                {data &&
-                    data.data?.map((item: userType, index) => (
-                        <Card.CardItem>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <div className="ml-2">
-                                        <UserCard
-                                            bio={item?.bio}
-                                            username={item?.username}
-                                            contributions={
-                                                item?.contributionsCount
-                                            }
-                                            projects={item?.projectsCount}
-                                        />
+                {data && (
+                    <>
+                        {data.data?.map((item: userType, index) => (
+                            <Card.CardItem>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="ml-2">
+                                            <UserCard
+                                                bio={item?.bio}
+                                                username={item?.username}
+                                                contributions={
+                                                    item?.contributionsCount
+                                                }
+                                                projects={item?.projectsCount}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Card.CardItem>
-                    ))}
+                            </Card.CardItem>
+                        ))}
+                        {showPagination && <Pagination data={data} />}
+                    </>
+                )}
             </FetchingCard>
         </Card>
     )

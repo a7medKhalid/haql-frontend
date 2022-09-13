@@ -44,10 +44,10 @@ export default function Issue({ data }) {
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">
                         <Card>
-                            <Card.CardHeader className="py-0 pt-3 pb-3 flex items-center justify-between">
+                            <Card.CardHeader className=" flex items-center justify-between">
                                 <DeleteIssue id={details.id} />
                                 <div className="flex items-center rtl">
-                                    <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div>
+                                    {/* <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div> */}
                                     <Link
                                         href={`/${details.issuer.issuername}`}>
                                         <a

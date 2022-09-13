@@ -452,7 +452,7 @@ const CreateGoal = () => {
         })
     }
     return (
-        <div>
+        <div className=" col-span-12 md:col-span-2 2xl:col-span-1">
             {newGoal.title == '' ? (
                 <div
                     className="bg-neutral-100 border border-neutral-300 p-4 rounded-md w-fit mb-1 text-primary-text/80 hover:bg-primary hover:text-white transition duration-150 cursor-pointer"

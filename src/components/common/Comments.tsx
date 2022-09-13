@@ -11,7 +11,11 @@ import { FetchingCard } from './FetchingCard'
 import { AnnotationIcon, ReplyIcon } from './HeroIcons'
 import TextArea from './TextArea'
 
-export const Comments = ({ model, preFetchedData }) => {
+interface props {
+    model: any
+    preFetchedData?: any
+}
+export const Comments = ({ model, preFetchedData }: props) => {
     const router = useRouter()
     var modelIDType
     const { user } = useAuth({})

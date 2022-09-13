@@ -4,8 +4,11 @@ import { useAuth } from '../../hooks/useAuth'
 import useSubmit from '../../hooks/useSubmit'
 import Button from '../Button'
 import Card from './Card'
-
-export const AddComment = ({ model, commentedID }) => {
+interface props {
+    model: any
+    commentedID?: any
+}
+export const AddComment = ({ model, commentedID }: props) => {
     const [formState, setFormState] = useState<any>({
         title: 'noTitle',
         body: '',
@@ -38,9 +41,6 @@ export const AddComment = ({ model, commentedID }) => {
     }
     const submitForm = event => {
         event.preventDefault()
-        console.log({ formState })
-        console.log({ commentedType })
-        console.log(commentedID ? commentedID : modelIDType)
 
         send({
             payload: {

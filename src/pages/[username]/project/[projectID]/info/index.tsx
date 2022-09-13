@@ -33,22 +33,24 @@ export default function Info({ data }) {
                     />
                     <div className="flex items-center justify-end h-screen">
                         <div className="z-1 text-white absolute px-4 sm:px-6 lg:px-16  rtl">
-                            <div className="text-8xl">{data?.name}</div>
-                            <div className="text-2xl mt-10 pl-[50rem] opacity-80">
+                            <div className="text-4xl lg:text-8xl">
+                                {data?.name}
+                            </div>
+                            <div className="text-lg lg:text-2xl mt-10 2xl:pl-[50rem] opacity-80">
                                 {data?.description}
                             </div>
                             <div className="flex items-center mt-20">
                                 <Button
                                     onClick={() =>
                                         router.push(
-                                            `/${router?.query.username}/${router?.query.projectID}`,
+                                            `/${router?.query.username}/project/${router?.query.projectID}`,
                                         )
                                     }
                                     className="ml-10 text-sm">
                                     تصفح المشروع
                                 </Button>
                                 <Link
-                                    href={`/${router.query.username}/${router.query.projectID}/contributions/create`}>
+                                    href={`/${router.query.username}/project/${router.query.projectID}/contributions/create`}>
                                     <a className="text-white hover:underline opacity-80 cursor-pointer transtion duration-150 hover:opacity-100 text-sm">
                                         ساهم
                                     </a>

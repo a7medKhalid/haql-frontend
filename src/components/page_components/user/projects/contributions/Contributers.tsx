@@ -60,7 +60,7 @@ export const ContributerCard = ({ name, contributionsCount, avatar }) => {
                     {pluralize('مساهم', contributionsCount)}
                 </div>
             </div>
-            <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div>
+            {/* <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div> */}
         </CardItem>
     )
 }

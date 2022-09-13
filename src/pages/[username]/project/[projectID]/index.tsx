@@ -39,14 +39,14 @@ export default function projectName({
     return (
         <ProjectLayout projectData={data}>
             <div className="grid grid-cols-4 gap-5">
-                <Card className="col-span-12 lg:col-span-3">
+                <Card className="col-span-12 lg:col-span-3 order-1 lg:order-0">
                     <ProjectAcceptedContributions
                         data={data}
                         projectID={projectInfo.id}
                     />
                 </Card>
 
-                <Card className="col-span-12 lg:col-span-1">
+                <Card className="col-span-12 lg:col-span-1 lg:order-1">
                     <ProjectDetails projectInfo={projectInfo} />
                 </Card>
             </div>
@@ -58,11 +58,9 @@ const ProjectAcceptedContributions = ({ data, projectID }) => {
     const router = useRouter()
     return (
         <>
-            <Card.CardHeader className="py-0 pt-3 pb-3 flex items-center justify-between">
+            <Card.CardHeader className="py-0 pt-3 pb-3 lg:flex items-center justify-between">
                 <RepositeryQuickAdd projectID={projectID} />
-                <div className="opacity-70">
-                    دمج #12 إضافة الشعار، بواسطة فيصل حداد
-                </div>
+                <div className="opacity-70">المساهمات المعتمدة</div>
             </Card.CardHeader>
             {data?.data?.map(contribution => (
                 <Link
@@ -131,16 +129,16 @@ const ProjectDetails = ({ projectInfo }) => {
 export const ContributionItem = ({ username, contribution_id, name }) => {
     return (
         <div className="flex items-center text-xs justify-between w-full ">
-            <div className="flex items-center justify-between">
+            <div className="lg:flex items-center justify-between">
                 <div className="text-primary-text text border-r border-neutral-300  px-5 ">
                     {`#${contribution_id}`}
                 </div>
-                <div className="flex items-center text-primary-text text border-r border-neutral-300  px-5">
+                <div className="flex items-center  text-primary-text text border-r border-neutral-300  px-5">
                     <div className=" ">{username}</div>
-                    <div className="w-7 h-7 rounded-full bg-gray-300 ml-3"></div>
+                    {/* <div className="w-7 h-7 rounded-full bg-gray-300 ml-3"></div> */}
                 </div>
             </div>
-            <div className="text-primary-text text-lg">{name}</div>
+            <div className="text-primary-text text-xs lg:text-lg">{name}</div>
         </div>
     )
 }
@@ -195,7 +193,7 @@ const RepositeryQuickAdd = ({ projectID }) => {
     return (
         <AnimatedSideBar
             trigger={
-                <Button className="py-2 text-xs ">
+                <Button className="py-1 mb-2 lg:mb-0 lg:py-2 text-xs ">
                     <ChevronDoubleIcon classname="mr-2 w-5 h-5" />
                     إضافة سريعة
                 </Button>

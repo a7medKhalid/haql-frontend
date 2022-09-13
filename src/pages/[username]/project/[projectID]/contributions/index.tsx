@@ -19,10 +19,10 @@ export default function contributions({ data, errors, username, projectID }) {
         <ProjectLayout>
             <div>
                 <div className="grid grid-cols-4 gap-5">
-                    <div className="col-span-12 lg:col-span-3">
+                    <div className="col-span-12 lg:col-span-3 order-1 lg:order-0">
                         <Contributions data={data} />
                     </div>
-                    <div className="col-span-12 lg:col-span-1">
+                    <div className="col-span-12 lg:col-span-1  lg:order-1">
                         <Contributers />
                     </div>
                 </div>

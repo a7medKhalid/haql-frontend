@@ -65,7 +65,7 @@ export const ContributionItem = ({ name, info, status, id }) => {
     return (
         <div className="flex items-center justify-between w-full rtl">
             <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-gray-300"></div>
+                {/* <div className="w-10 h-10 rounded-full bg-gray-300"></div> */}
                 <div className="flex flex-col mr-3">
                     <Link
                         href={`/${router.query.username}/project/${router.query.projectID}/contributions/${id}`}>

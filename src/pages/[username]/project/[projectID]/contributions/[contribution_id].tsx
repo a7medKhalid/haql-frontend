@@ -46,10 +46,10 @@ export default function Contribution({ data, contribution_id }) {
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">
                         <Card>
-                            <Card.CardHeader className="py-0 pt-3 pb-3 flex items-center justify-between">
+                            <Card.CardHeader className=" flex items-center justify-between">
                                 <DeleteContribution id={details.id} />
                                 <div className="flex items-center rtl">
-                                    <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div>
+                                    {/* <div className="w-10 h-10 rounded-full bg-gray-300 ml-3"></div> */}
                                     <Link
                                         href={`/${details.contributor.username}`}>
                                         <a
@@ -233,7 +233,7 @@ const AcceptedContributions = ({ details }) => {
                                 </div>
                                 <div className="flex items-center text-primary-text text border-r border-neutral-300  px-5">
                                     <div className=" ">{`${contribution.contributor.name}/${contribution.contributor.username}`}</div>
-                                    <div className="w-7 h-7 rounded-full bg-gray-300 ml-3"></div>
+                                    {/* <div className="w-7 h-7 rounded-full bg-gray-300 ml-3"></div> */}
                                 </div>
                             </div>
                             <div className="text-primary-text text-lg">

@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Footer() {
     return (
-        <div className=" border-t border-neutral-300 rtl py-9 px-5 mt-10 flex items-center justify-between text-primary-text/50">
+        <div className=" border-t border-neutral-300 rtl py-9 px-5 mt-10 md:mt-0 lg:flex items-center justify-between text-primary-text/50">
             <div className="flex items-center">
                 <div className="text-xs bold">حقل</div>
                 <div className="flex items-center  mr-4 text-xs">
@@ -20,8 +20,8 @@ export default function Footer() {
                 </div>
             </div>
             <div>
-                <div className="flex items-center text-primary-text/50 text-xs">
-                    <div className="ml-2">
+                <div className="lg:flex items-center text-primary-text/50 text-xs mt-5 md:mt-0">
+                    <div className="ml-2 mb-5 md:mb-0">
                         {' '}
                         تواصل معنا{' '}
                         <a

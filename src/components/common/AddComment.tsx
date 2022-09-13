@@ -5,7 +5,7 @@ import useSubmit from '../../hooks/useSubmit'
 import Button from '../Button'
 import Card from './Card'
 
-export const AddComment = ({ model }) => {
+export const AddComment = ({ model, commentedID }) => {
     const [formState, setFormState] = useState<any>({
         title: 'noTitle',
         body: '',
@@ -14,11 +14,15 @@ export const AddComment = ({ model }) => {
     })
     const router = useRouter()
     var modelIDType
-
-    if (model == 'contributions') {
+    let commentedType
+    if (model == 'contributions' || model == 'contribution') {
+        commentedType = 'contribution'
         modelIDType = router.query?.contribution_id
-    } else if (model == 'issues') {
+    } else if (model == 'issues' || model == 'issue') {
+        commentedType = 'issue'
         modelIDType = router.query?.issue_id
+    } else if (model == 'comment') {
+        commentedType = 'comment'
     }
 
     const { user } = useAuth({})
@@ -34,13 +38,16 @@ export const AddComment = ({ model }) => {
     }
     const submitForm = event => {
         event.preventDefault()
+        console.log({ formState })
+        console.log({ commentedType })
+        console.log(commentedID ? commentedID : modelIDType)
 
         send({
             payload: {
                 ...formState,
                 body: formState.body,
-                commentedType: model.slice(0, -1),
-                commented_id: modelIDType,
+                commentedType: commentedType,
+                commented_id: commentedID ? commentedID : modelIDType,
             },
             url: `/api/comments`,
             onSuccess: a => {

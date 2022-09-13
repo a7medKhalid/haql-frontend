@@ -72,7 +72,7 @@ const AppLayout = ({
             )}
             {/* Page Content */}
             <main className={`mt-5 px-4 sm:px-6 lg:px-16 ${contentClassname}`}>
-                {children}
+                <div className="min-h-[80vh]">{children}</div>
                 {variant == 'default' && children != null && <Footer />}
             </main>
         </div>

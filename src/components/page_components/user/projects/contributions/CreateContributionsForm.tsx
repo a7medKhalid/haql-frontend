@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useAuth } from '../../../../../hooks/useAuth'
 import useSubmit from '../../../../../hooks/useSubmit'
 import Button from '../../../../Button'
+import TextArea from '../../../../common/TextArea'
 import Input from '../../../../Input'
 import InputError from '../../../../InputError'
 import Label from '../../../../Label'
@@ -41,6 +42,12 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
             payload: formState,
             url: '/api/contributions',
             onSuccess: a => {
+                setFormState({
+                    project_id: router.query.projectID,
+                    title: '',
+                    description: '',
+                    link: '',
+                })
                 router.push(
                     '/[username]/project/[projectID]/contributions/[contribution_id]',
                     `/${router.query.username}/project/${router.query.projectID}/contributions/${a.id}`,
@@ -68,22 +75,14 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
                 </div>
                 <div className="mt-7">
                     <Label>الوصف</Label>
-                    <div className="relative">
-                        <textarea
-                            id="description"
-                            value={formState.description}
-                            className="block mt-1 w-full
+                    <TextArea
+                        name="description"
+                        value={formState.description}
+                        className="block mt-1 w-full
                                     px-4 py-5 text-accent placeholder-accent text-right rounded-lg border-2  border-slate-200 bg-neutral-100  focus:border-accent focus:ring focus:ring-accent focus:ring-opacity-50
                                     "
-                            onChange={onChange}
-                            rows={5}
-                            required
-                            maxLength={255}
-                            autoComplete="off"></textarea>
-                        <div className="absolute bottom-2 left-1 text-xs opacity-50">
-                            {formState.description.length}/255
-                        </div>
-                    </div>
+                        onChange={onChange}
+                    />
 
                     <InputError
                         messages={errors.description}

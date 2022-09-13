@@ -97,7 +97,7 @@ export default function settings({ data }) {
                                 />
                             </ProjectDetailItem>
                         </Card.CardItem>
-                        <Card.CardItem>
+                        <Card.CardItem className="w-full">
                             <ProjectDetailItem title="">
                                 <TextArea
                                     name={'description'}
@@ -117,7 +117,7 @@ export default function settings({ data }) {
                     <Card.CardItem>
                         <AnimatedSideBar
                             trigger={
-                                <ProjectDetailItem title="حذف المشروع">
+                                <ProjectDetailItem title="">
                                     <Button className="bg-red-500 border-b-red-700 hover:bg-red-600">
                                         حذف المشروع
                                     </Button>
@@ -151,7 +151,7 @@ export default function settings({ data }) {
 
 const ProjectDetailItem = ({ title, children }) => {
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
             <div className="text-primary-text font-bold ">{title}</div>
             <div className="text-primary-text  rtl mt-2">{children}</div>
         </div>

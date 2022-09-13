@@ -8,10 +8,10 @@ import { fetcher } from '../../lib/fetcher'
 import Button from '../Button'
 import Card from './Card'
 import { FetchingCard } from './FetchingCard'
-import { ReplyIcon } from './HeroIcons'
+import { AnnotationIcon, ReplyIcon } from './HeroIcons'
 import TextArea from './TextArea'
 
-export const Comments = ({ model }) => {
+export const Comments = ({ model, preFetchedData }) => {
     const router = useRouter()
     var modelIDType
     const { user } = useAuth({})
@@ -20,19 +20,21 @@ export const Comments = ({ model }) => {
     } else if (model == 'issues') {
         modelIDType = router.query?.issue_id
     }
-
     const { data, error } = useSWR(
         `/api/${model}/${modelIDType}/comments`,
         fetcher,
     )
 
     if (data?.comments?.data?.length < 1) return null
+
+    const usedData = preFetchedData ? preFetchedData : data
+
     return (
-        <FetchingCard data={data} error={error}>
+        <FetchingCard data={usedData} error={error}>
             <Card className="mt-5 border-b-0">
                 <Card.CardHeader>التعليقات</Card.CardHeader>
-                {data?.comments?.data?.length > 0 ? (
-                    data?.comments?.data?.map(comment => (
+                {usedData?.comments?.data?.length > 0 ? (
+                    usedData?.comments?.data?.map(comment => (
                         <Comment
                             authUser={user}
                             key={comment.id}
@@ -40,6 +42,7 @@ export const Comments = ({ model }) => {
                             username={comment.user.username}
                             createdAt={comment.created_at}
                             comment={comment.body}
+                            replysCount={comment.replysCount}
                         />
                     ))
                 ) : (
@@ -53,7 +56,15 @@ export const Comments = ({ model }) => {
         </FetchingCard>
     )
 }
-const Comment = ({ id, username, comment, createdAt, authUser }) => {
+const Comment = ({
+    id,
+    username,
+    comment,
+    createdAt,
+    authUser,
+    replysCount,
+}) => {
+    const router = useRouter()
     const { send } = useSubmit()
     const [replay, setReplay] = useState({
         show: false,
@@ -84,7 +95,7 @@ const Comment = ({ id, username, comment, createdAt, authUser }) => {
         <Card.CardItem className="hover:bg-neutral-200 cursor-pointer transition duration-150 ease-out w-full">
             <Link
                 href={{
-                    pathname: `/${username}/comment/${id}`,
+                    pathname: `/${router.query.username}/project/${router.query.projectID}/comment/${id}`,
                 }}>
                 <div className="w-full">
                     {replay?.status === 'sent' && (
@@ -149,6 +160,11 @@ const Comment = ({ id, username, comment, createdAt, authUser }) => {
                                 replay.show == false ? (
                                     <DeleteComment id={id} />
                                 ) : null}
+                                <div className="pr-1 flex items-center border-l border-l-neutral-300 px-1">
+                                    <AnnotationIcon classname="ml-1" />
+                                    {replysCount}
+                                </div>
+
                                 <div className="pr-1">{createdAt}</div>
                             </div>
                         </div>

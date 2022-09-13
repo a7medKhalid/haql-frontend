@@ -19,9 +19,19 @@ export default function Footer() {
                     </Link>
                 </div>
             </div>
-
-            <div className="text-primary-text/50 text-xs">
-                جميع الحقوق محفوظة © السيف
+            <div>
+                <div className="flex items-center text-primary-text/50 text-xs">
+                    <div className="ml-2">
+                        {' '}
+                        تواصل معنا{' '}
+                        <a
+                            href="mailto:alseef@gmail.com"
+                            className="text-primary/50 hover:text-primary hover:underline">
+                            alseef@gmail.com{' '}
+                        </a>
+                    </div>
+                    جميع الحقوق محفوظة © السيف
+                </div>
             </div>
         </div>
     )

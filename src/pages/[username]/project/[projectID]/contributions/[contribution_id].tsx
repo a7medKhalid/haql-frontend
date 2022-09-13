@@ -104,6 +104,9 @@ export default function Contribution({ data, contribution_id }) {
                             {details.status != 'accepted' && (
                                 <AcceptContributionButton details={details} />
                             )}
+                            {details.status == 'accepted' && (
+                                <ArchiveContributionButton details={details} />
+                            )}
                         </Card>
                     </div>
                 </div>
@@ -241,6 +244,67 @@ const AcceptedContributions = ({ details }) => {
                 ))}
             </Card>
         </FetchingCard>
+    )
+}
+
+const ArchiveContributionButton = ({ details }) => {
+    const { send, errors, response, loading } = useSubmit()
+    const router = useRouter()
+    const { data, error } = useSWR(
+        `/api/permissions?model=contribution&model_id=${details.id}&permission=update`,
+        fetcher,
+    )
+    if (details.status !== 'accepted') return null
+    if (!data) {
+        return null
+    }
+    if (data?.message === false) {
+        return null
+    }
+
+    const archieveContribution = () => {
+        send({
+            payload: {
+                contribution_id: details.id,
+                status: 'archived',
+            },
+            method: 'put',
+            url: '/api/contributions',
+            onSuccess: a => {
+                router.push(
+                    `/${router.query.username}/project/${details.projectID}`,
+                )
+            },
+        })
+    }
+
+    return (
+        <CardItem>
+            <AnimatedSideBar
+                trigger={
+                    <Button>
+                        <ChevronDoubleIcon classname="mr-2 w-5 h-5" />
+                        أرشفة المساهمة
+                    </Button>
+                }>
+                <div>
+                    <Card.CardHeader>
+                        <div className="text-2xl bold">
+                            هل تريد أرشفة المساهمة
+                        </div>
+                        <div className="mt-4 text-primary-text/80">
+                            في حال أرشفة المساهمة سيتم إخفائها من المستودع ولكن
+                            ستبقى في خانة المساهمات
+                        </div>
+                        <Button
+                            className="mt-4 text-xs py-3 "
+                            onClick={archieveContribution}>
+                            أرشفة المساهمة
+                        </Button>
+                    </Card.CardHeader>
+                </div>
+            </AnimatedSideBar>
+        </CardItem>
     )
 }
 

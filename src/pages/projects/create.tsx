@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Button from '../../components/Button'
+import TextArea from '../../components/common/TextArea'
 import Input from '../../components/Input'
 import InputError from '../../components/InputError'
 import Label from '../../components/Label'
@@ -72,21 +73,14 @@ export default function create() {
                             </div>
                             <div className="mt-7">
                                 <Label>وصف المشروع</Label>
-                                <textarea
-                                    id="description"
+                                <TextArea
+                                    name="description"
                                     value={formState.description}
                                     className="block mt-1 w-full
                                     px-4 py-5 text-accent placeholder-accent text-right rounded-lg border-2  border-slate-200 bg-neutral-100  focus:border-accent focus:ring focus:ring-accent focus:ring-opacity-50
                                     "
                                     onChange={onChange}
-                                    rows={5}
-                                    required
-                                    autoComplete="off"></textarea>
-
-                                {/* <InputError
-                                    messages={errors.description}
-                                    className="mt-2"
-                                /> */}
+                                />
                             </div>
                             <div className="mt-7">
                                 <Label>رخصة المشروع</Label>

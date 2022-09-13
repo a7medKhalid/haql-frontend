@@ -97,6 +97,7 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
                         value={formState.link}
                         className="block mt-1 w-full"
                         onChange={onChange}
+                        maxLength={255}
                     />
                     <div className="mt-1 text-xs text-gray-300">
                         رابط التصميم، المشروع، الفيديو، الكتاب، الخ

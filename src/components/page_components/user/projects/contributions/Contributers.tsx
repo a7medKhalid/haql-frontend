@@ -18,6 +18,7 @@ export const Contributers = () => {
                 <Card.CardHeader>المساهمين</Card.CardHeader>
                 {data?.data?.map(contributor => (
                     <ContributerCard
+                        key={contributor.id}
                         name={contributor.name + '/' + contributor.username}
                         contributionsCount={contributor.contributionsCount}
                         avatar={''}

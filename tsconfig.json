@@ -17,6 +17,11 @@
         "jsx": "preserve",
         "resolveJsonModule": true
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "src/components/ErrorBoundary.js"
+    ],
     "exclude": ["node_modules"]
 }

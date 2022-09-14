@@ -17,6 +17,9 @@ export const UserProjects = () => {
         fetcher,
     )
 
+    if (error) {
+        router.replace('/500')
+    }
     return (
         <>
             <Card>

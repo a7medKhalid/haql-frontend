@@ -10,13 +10,15 @@ export async function getServerSideProps(context) {
     const { username, commentID } = context.params
     // Fetch data from external API
     const { data, errors } = await getData(`/api/comments/${commentID}`)
-
+    if (!data || errors) {
+        return {
+            notFound: true,
+        }
+    }
     // Pass data to the page via props
     return { props: { data, errors, username } }
 }
 export default function commentID({ data, username }) {
-    console.log({ data })
-
     return (
         <ProjectLayout>
             <ReplyedComment data={data} />

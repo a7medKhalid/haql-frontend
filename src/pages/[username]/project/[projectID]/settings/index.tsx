@@ -14,8 +14,12 @@ export async function getServerSideProps(context) {
 
     // Fetch data from external API
 
-    const { data } = await getData(`/api/projects/${projectID}`)
-
+    const { data, errors } = await getData(`/api/projects/${projectID}`)
+    if (!data || errors) {
+        return {
+            notFound: true,
+        }
+    }
     // Pass data to the page via props
     return { props: { data } }
 }

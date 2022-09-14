@@ -53,7 +53,8 @@ const LatestProjects = () => {
                         {data.data?.map((item: projectDataType, index) => (
                             <Card.CardItem key={item.id}>
                                 <div>
-                                    <Link href={`/${item.issuesCount}`}>
+                                    <Link
+                                        href={`/${item.ownerUsername}/project/${item.id}`}>
                                         <a
                                             href=""
                                             className="text-sm text-primary font-bold">
@@ -93,7 +94,8 @@ const TrendingProjects = () => {
                     data.data?.map((item: projectDataType, index) => (
                         <Card.CardItem key={item.id}>
                             <div>
-                                <Link href={`/${item.issuesCount}`}>
+                                <Link
+                                    href={`/${item.ownerUsername}/project/${item.id}`}>
                                     <a
                                         href=""
                                         className="text-sm text-primary font-bold">

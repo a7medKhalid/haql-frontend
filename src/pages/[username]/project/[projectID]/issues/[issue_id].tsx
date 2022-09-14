@@ -24,7 +24,11 @@ export async function getServerSideProps(context) {
     const { issue_id } = context.params
     // Fetch data from external API
     const { data, errors } = await getData(`/api/issues/${issue_id}`)
-
+    if (!data || errors) {
+        return {
+            notFound: true,
+        }
+    }
     // Pass data to the page via props
     return { props: { data, errors } }
 }

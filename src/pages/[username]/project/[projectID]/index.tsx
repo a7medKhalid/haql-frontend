@@ -27,6 +27,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     )
     const { data: projectInfo } = await getData(`/api/projects/${projectID}`)
 
+    if (!projectInfo || errors) {
+        return {
+            notFound: true,
+        }
+    }
+
     // Pass data to the page via props
     return { props: { data, errors, projectInfo } }
 }

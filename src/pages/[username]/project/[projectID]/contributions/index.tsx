@@ -12,7 +12,11 @@ export async function getServerSideProps(context) {
     const { data, errors } = await getData(
         `/api/projects/${projectID}/contributions?page=${curPage}`,
     )
-
+    if (!data || errors) {
+        return {
+            notFound: true,
+        }
+    }
     // Pass data to the page via props
     return { props: { data, errors, username, projectID } }
 }

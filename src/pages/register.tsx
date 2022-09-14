@@ -10,7 +10,7 @@ import { useAuth } from '../hooks/useAuth'
 const Register = () => {
     const { register } = useAuth({
         middleware: 'guest',
-        redirectIfAuthenticated: '/dashboard',
+        redirectIfAuthenticated: '/explore/projects',
     })
 
     const [formState, setFormState] = useState({

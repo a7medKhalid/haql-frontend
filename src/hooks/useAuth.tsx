@@ -22,7 +22,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: props) => {
     )
 
     const csrf = () => axios.get('/sanctum/csrf-cookie')
-
     const register = async ({ setErrors, ...props }) => {
         await csrf()
 
@@ -58,14 +57,14 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: props) => {
 
     const forgotPassword = async ({ setErrors, setStatus, email }) => {
         await csrf()
-
         setErrors([])
         setStatus(null)
-
         axios
             .post('/forgot-password', { email })
             .then(response => setStatus(response.data.status))
             .catch(error => {
+                console.log(error.response)
+
                 if (error.response.status !== 422) throw error
 
                 setErrors(error.response.data.errors)

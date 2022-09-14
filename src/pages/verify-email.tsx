@@ -1,35 +1,25 @@
-import ApplicationLogo from '@/components/ApplicationLogo'
-import AuthCard from '@/components/AuthCard'
-import Button from '@/components/Button'
-import GuestLayout from '@/components/Layouts/GuestLayout'
 import Link from 'next/link'
-import { useAuth } from '@/hooks/auth'
 import { useState } from 'react'
+import Button from '../components/Button'
+import AuthLayout from '../components/Layouts/AuthLayout'
+import { useAuth } from '../hooks/useAuth'
 
 const VerifyEmail = () => {
     const { logout, resendEmailVerification } = useAuth({
-        middleware: 'auth',
-        redirectIfAuthenticated: '/dashboard',
+        // middleware: 'auth',
+        // redirectIfAuthenticated: '/dashboard',
     })
 
     const [status, setStatus] = useState(null)
 
     return (
-        <GuestLayout>
-            <AuthCard
-                logo={
-                    <Link href="/">
-                        <a>
-                            <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-                        </a>
-                    </Link>
-                }>
-
+        <AuthLayout>
+            <div className="lg:w-2/4 text-right">
                 <div className="mb-4 text-sm text-gray-600">
-                    Thanks for signing up! Before getting started, could you
-                    verify your email address by clicking on the link we just
-                    emailed to you? If you didn't receive the email, we will
-                    gladly send you another.
+                    شكرا لتسجيلك! قبل أن تبدأ ، هل يمكنك التحقق من عنوان بريدك
+                    الإلكتروني من خلال النقر على الرابط الذي أرسلناه إلى البريد
+                    الإلكتروني الخاص بك؟ إذا لم تتلق البريد الإلكتروني ، فسنقوم
+                    بكل سرور إرسال رابط آخر لك آخر.
                 </div>
 
                 {status === 'verification-link-sent' && (
@@ -42,18 +32,18 @@ const VerifyEmail = () => {
                 <div className="mt-4 flex items-center justify-between">
                     <Button
                         onClick={() => resendEmailVerification({ setStatus })}>
-                        Resend Verification Email
+                        إرسال مرة أخرى
                     </Button>
 
                     <button
                         type="button"
                         className="underline text-sm text-gray-600 hover:text-gray-900"
                         onClick={logout}>
-                        Logout
+                        تسجيل الخروج
                     </button>
                 </div>
-            </AuthCard>
-        </GuestLayout>
+            </div>
+        </AuthLayout>
     )
 }
 

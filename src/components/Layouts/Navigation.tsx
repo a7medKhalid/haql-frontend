@@ -28,7 +28,7 @@ const Navigation = ({ isSubHeader, variant }) => {
                     <div className="flex">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center">
-                            <Link href="/dashboard">
+                            <Link href="/explore/projects">
                                 <a className="bold">
                                     حقل
                                     {/* <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" /> */}

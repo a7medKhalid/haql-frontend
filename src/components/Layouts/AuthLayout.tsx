@@ -6,13 +6,13 @@ import Image from 'next/image'
 export default function AuthLayout({ children }) {
     return (
         <div className="lg:grid lg:grid-cols-5 bg-gray-50">
-            <div className="col-span-3 h-[40vh] lg:h-screen overflow-hidden relative">
+            <div className="lg:col-span-3 h-[50vh]  lg:h-screen overflow-hidden relative">
                 <Image
                     src={authBanner}
                     className="brightness-50 object-cover"
                     layout="fill"
                 />
-                <div className="absolute bottom-8 right-24 text-center lg:text-right">
+                <div className="absolute bottom-8 right-24 text-center pl-24 lg:text-right">
                     <div className="text-5xl lg:text-8xl text-white font-bold ">
                         ..حقل
                     </div>
@@ -32,7 +32,7 @@ export default function AuthLayout({ children }) {
                     </div>
                 </div>
             </div>
-            <div className="col-span-2 mt-10 lg:mt-0 flex items-center justify-center">
+            <div className="col-span-2 mt-10 lg:mt-0 flex items-center justify-center pb-10 lg:pb-0">
                 {children}
             </div>
         </div>

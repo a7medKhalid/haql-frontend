@@ -223,7 +223,7 @@ const AcceptedContributions = ({ details }) => {
             <Card className="mt-4">
                 {data?.data?.map(contribution => (
                     <Card.CardItem key={contribution.id}>
-                        <div className="flex items-center text-xs justify-between w-full">
+                        <div className="lg:flex items-center text-xs justify-between w-full">
                             <div className="flex items-center justify-between">
                                 <Button
                                     className="text-xs py-1 px-3 "

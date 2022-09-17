@@ -97,7 +97,8 @@ export default function create() {
                                 <div className="mt-1 text-xs text-gray-300">
                                     حاليا لا يمكن إضافة مشروع إلا
                                     <a
-                                        href="#"
+                                        href="https://ojuba.org/waqf-2.0:%D8%B1%D8%AE%D8%B5%D8%A9_%D9%88%D9%82%D9%81_%D8%A7%D9%84%D8%B9%D8%A7%D9%85%D8%A9"
+                                        target="_blank"
                                         className="text-primary mr-1 hover:underline">
                                         برخصة وقف
                                     </a>

@@ -14,10 +14,10 @@ export default function AnimatedSideBar({ trigger, children }) {
             )}
             <div onClick={() => setShowSidebar(!showSidebar)}>{trigger}</div>
             <div
-                className={`top-0 right-0 w-[90vw] lg:w-[35vw] bg-white  shadow-2xl  text-primary-text fixed h-full z-40 rounded-l-2xl ease-out duration-150 ${
+                className={`top-0 right-0 w-[90vw] lg:w-[35vw] bg-white  shadow-2xl  text-primary-text fixed h-screen overflow-y-scroll z-40 rounded-l-2xl ease-out duration-150 ${
                     showSidebar ? 'translate-x-0 ' : 'translate-x-full'
                 }`}>
-                <h3 className="mt-20  text-primary-text">{children}</h3>
+                <div className="mt-20  text-primary-text pb-10">{children}</div>
             </div>
         </>
     )

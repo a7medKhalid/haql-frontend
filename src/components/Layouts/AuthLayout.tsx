@@ -32,7 +32,7 @@ export default function AuthLayout({ children }) {
                     </div>
                 </div>
             </div>
-            <div className="col-span-2 mt-10 lg:mt-0 flex items-center justify-center pb-10 lg:pb-0">
+            <div className="col-span-2 mt-10 lg:mt-0 flex items-center justify-center pb-20 lg:pb-0">
                 {children}
             </div>
         </div>

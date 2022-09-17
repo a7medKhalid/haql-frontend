@@ -86,7 +86,6 @@ const Register = () => {
                         className="block mt-1 w-full"
                         onChange={onChange}
                         required
-                        autoFocus
                     />
                     <InputError messages={errors.username} className="mt-2" />
                 </div>
@@ -100,7 +99,6 @@ const Register = () => {
                         className="block mt-1 w-full"
                         onChange={onChange}
                         required
-                        autoFocus
                     />
                     <InputError messages={errors.name} className="mt-2" />
                 </div>

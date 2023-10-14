@@ -17,7 +17,7 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
         // redirectIfAuthenticated: '/dashboard',
     })
     const { send, errors, response, loading } = useSubmit()
-    const router = useRouter()
+    const router:any = useRouter()
 
     const [formState, setFormState] = useState<any>({
         project_id: router.query.projectID,
@@ -40,12 +40,14 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
             return customFormSubmit(formState)
         }
 
-        const  formData = new FormData()
+        const formData = new FormData()
         formData.append('project_id', router.query.projectID)
         formData.append('title', formState.title)
         formData.append('description', formState.description)
-        for (let i = 0; i < formState.file.length; i++) {
-            formData.append('files[]', formState.file[i]);
+        if (formState.file) {
+            for (let i = 0; i < formState.file.length; i++) {
+                formData.append('files[]', formState.file[i], formState.file[i].name);
+            }
         }
         console.log('formState.file', formState.file);
 

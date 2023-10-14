@@ -32,6 +32,9 @@ export async function getServerSideProps(context) {
     // Pass data to the page via props
     return { props: { data, errors, username, projectID, contribution_id } }
 }
+const downloadFile = async () => {
+        
+};
 export default function Contribution({ data, contribution_id }) {
     const router = useRouter()
     const details = {
@@ -44,11 +47,14 @@ export default function Contribution({ data, contribution_id }) {
         createdAt: data?.created_at,
         status: data?.status,
     }
+    
+
     return (
         <ProjectLayout>
             <div>
                 <div className="lg:grid grid-cols-4 gap-5">
                     <div className="col-span-3 pb-10">
+
                         <Card>
                             <Card.CardHeader className=" flex items-center justify-between">
                                 <DeleteContribution id={details.id} />
@@ -107,10 +113,9 @@ export default function Contribution({ data, contribution_id }) {
                             </CardItem>
                             {details.status != 'accepted' && (
                                 <AcceptContributionButton details={details} />
-                            )}
-                            {details.status == 'accepted' && (
-                                <ArchiveContributionButton details={details} />
-                            )}
+                        )}
+                            <DownloadFileButton id={details.id} />
+
                         </Card>
                     </div>
                 </div>
@@ -173,9 +178,7 @@ const AcceptContributionButton = ({ details }) => {
                             قبول وإضافة جديدة
                         </Button>
                     </Card.CardHeader>
-                    <div className="px-5">
-                        <AcceptedContributions details={details} />
-                    </div>
+                  
                 </div>
             </AnimatedSideBar>
         </CardItem>
@@ -217,6 +220,7 @@ const AcceptedContributions = ({ details }) => {
         })
         acceptContribution()
     }
+
     return (
         <FetchingCard data={data} error={error}>
             <div className="text-lg bold mt-4">أو الإستبدال بــ</div>
@@ -250,6 +254,47 @@ const AcceptedContributions = ({ details }) => {
         </FetchingCard>
     )
 }
+
+import axios from '../../../../../lib/axios'
+
+const DownloadFileButton = ({ id }) => {
+    const router = useRouter();
+
+    const downloadFile = async () => {
+
+        const csrf = () => axios.get('/sanctum/csrf-cookie')
+
+
+        try {
+            await csrf()
+
+            const response = await axios.get(`/api/contributions/${id}/files`, {
+            
+                responseType: 'blob', // This ensures the data is received as a Blob
+            });
+
+            const blob = new Blob([response.data], { type: 'application/zip' });
+            const href = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = href;
+            link.download = 'files.zip';  // Naming the downloaded file as "files.zip"
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+        } catch (error) {
+            console.error("Error downloading file:", error);
+        }
+    }
+
+    return (
+        <Button onClick={downloadFile}>
+            حمل الملفات
+        </Button>
+    );
+}
+
+
 
 const ArchiveContributionButton = ({ details }) => {
     const { send, errors, response, loading } = useSubmit()

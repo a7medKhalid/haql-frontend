@@ -23,7 +23,7 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
         project_id: router.query.projectID,
         title: router.query?.title ? router.query?.title : '',
         description: '',
-        link: '',
+        file: null,
     })
 
     const onChange = event => {
@@ -35,18 +35,32 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
     }
     const submitForm = event => {
         event.preventDefault()
+
         if (customFormSubmit) {
             return customFormSubmit(formState)
         }
+
+        const  formData = new FormData()
+        formData.append('project_id', router.query.projectID)
+        formData.append('title', formState.title)
+        formData.append('description', formState.description)
+        for (let i = 0; i < formState.file.length; i++) {
+            formData.append('files[]', formState.file[i]);
+        }
+        console.log('formState.file', formState.file);
+
+        console.log( router.query.projectID)
+
+
         send({
-            payload: formState,
+            payload: formData,
             url: '/api/contributions',
             onSuccess: a => {
                 setFormState({
-                    project_id: router.query.projectID,
+                  
                     title: '',
                     description: '',
-                    link: '',
+                    file: null,
                 })
                 router.push(
                     '/[username]/project/[projectID]/contributions/[contribution_id]',
@@ -90,21 +104,16 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
                     />
                 </div>
                 <div className="mt-7">
-                    <Label>رابط المساهمة</Label>
+                    <Label>رفع الملف</Label>
                     <Input
-                        id="link"
-                        type="text"
-                        value={formState.link}
-                        required
-                        className="block mt-1 w-full"
-                        onChange={onChange}
-                        maxLength={255}
+                        id="file"
+                         directory="" webkitdirectory="" type="file"
+
+                        onChange={e => setFormState({...formState, file: e.target.files})}
                     />
-                    <div className="mt-1 text-xs text-gray-300">
-                        رابط التصميم، المشروع، الفيديو، الكتاب، الخ
-                    </div>
-                    <InputError messages={errors.link} className="mt-2" />
+                    <InputError messages={errors.file} className="mt-2" />
                 </div>
+
 
                 <div className="mt-7">
                     <Button className={''} loading={loading}>

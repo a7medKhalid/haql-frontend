@@ -66,10 +66,12 @@ export default function projectName({
 
 const ProjectAcceptedContributions = ({ data, projectID }) => {
     const router = useRouter()
+    
     return (
         <>
             <Card.CardHeader className="py-0 pt-3 pb-3 lg:flex items-center justify-between">
                 <RepositeryQuickAdd projectID={projectID} />
+                <DownloadFileButton id={projectID} />
                 <div className="opacity-70">المساهمات المعتمدة</div>
             </Card.CardHeader>
             {data?.data?.map(contribution => (
@@ -234,4 +236,44 @@ const RepositeryQuickAdd = ({ projectID }) => {
             </div>
         </AnimatedSideBar>
     )
+    
+}
+
+
+
+const DownloadFileButton = ({ id }) => {
+    const router = useRouter();
+
+    const downloadFile = async () => {
+
+        const csrf = () => axios.get('/sanctum/csrf-cookie')
+
+
+        try {
+            await csrf()
+
+            const response = await axios.get(`/api/projects/${id}/files`, {
+            
+                responseType: 'blob', // This ensures the data is received as a Blob
+            });
+
+            const blob = new Blob([response.data], { type: 'application/zip' });
+            const href = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = href;
+            link.download = 'files.zip';  // Naming the downloaded file as "files.zip"
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+        } catch (error) {
+            console.error("Error downloading file:", error);
+        }
+    }
+
+    return (
+        <Button onClick={downloadFile}>
+            حمل الملفات
+        </Button>
+    );
 }

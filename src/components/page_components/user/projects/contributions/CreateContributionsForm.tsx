@@ -41,7 +41,7 @@ export default function CreateContributionsForm({ customFormSubmit }: props) {
         }
 
         const formData = new FormData()
-        formData.append('project_id', router.query.projectID)
+        formData.append('project_id', router.query.projectID as string)
         formData.append('title', formState.title)
         formData.append('description', formState.description)
         if (formState.file) {
